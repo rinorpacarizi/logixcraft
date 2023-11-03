@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const productRoutes = require("./routes/products-routes");
 const userRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -25,4 +26,5 @@ app.use((error, req, res, next) => {
     .json({ message: error.message || "Unknown error occured" });
 });
 
-app.listen(5000);
+mongoose.connect('mongodb+srv://rinor:53n7fxNu9hXRsGsl@cluster0.2smdkhv.mongodb.net/database?retryWrites=true&w=majority').then(()=>{app.listen(5000);}).catch(err =>{console.log(err)});
+
