@@ -10,12 +10,12 @@ router.post(
   "/signup",
   [
     check("fullName").not().isEmpty(),
-    check("email").not().normalizeEmail().isEmail(),
-    check("password").not().isLength({min:6}),
+    check("email").normalizeEmail().isEmail(),
+    check("password").isLength({ min: 6 }),
     check("address").not().isEmpty(),
-    check("role").not().isEmpty(),
-    check("personalNum").not().isLength({min:12, max:13}).isEmpty(),
-    check("phoneNumber").not().isLength({min:9, max:13}).isEmpty(),
+    check("personalNum").isLength({ min: 12, max: 13 }), 
+    check("phoneNumber").isLength({ min: 9, max: 13 }), 
+    check("products"), 
   ],
   usersController.signup
 );

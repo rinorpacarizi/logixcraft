@@ -12,7 +12,7 @@ const productSchema = new Schema({
     ordered: { type: Number, require: true },
     preOrdered: { type: Number, require: true },
   },
-  creator: { type: String, require: true },
+  creator: { type: mongoose.Types.ObjectId, require: true, ref: "Supplier" },
 });
 
 module.exports = mongoose.model("Product", productSchema);

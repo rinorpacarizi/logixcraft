@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/products", productRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 
 app.use((req, res, next) => {
   throw new HttpError("Couldnt find this route", 404);
@@ -26,5 +26,5 @@ app.use((error, req, res, next) => {
     .json({ message: error.message || "Unknown error occured" });
 });
 
-mongoose.connect('mongodb+srv://rinor:53n7fxNu9hXRsGsl@cluster0.2smdkhv.mongodb.net/database?retryWrites=true&w=majority').then(()=>{app.listen(5000);}).catch(err =>{console.log(err)});
+mongoose.connect('mongodb+srv://rinor:admin1212@cluster0.2smdkhv.mongodb.net/database?retryWrites=true&w=majority').then(()=>{app.listen(5000);}).catch(err =>{console.log(err)});
 

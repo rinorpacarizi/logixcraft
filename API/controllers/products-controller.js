@@ -1,18 +1,20 @@
-const uuid = require("uuid");
+const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const Product = require("../models/product");
+const Supplier = require("../models/supplier");
+const supplier = require("../models/supplier");
+const product = require("../models/product");
 
-let DUMMY_PRODUCTS = [
-  {
-    id: "p1",
-    name: "Juice",
-    type: "Consumables",
-    price: 1.99,
-    amount: { stock: 12, ordered: 6, preOrdered: 0 },
-    creator: "u1",
-  },
-];
+const getProducts= async (req,res,next) =>{
+  let products;
+  try{
+    products = await Product.find();
+  }catch(err){
+    return next(new HttpError('Couldnt find products', 500))
+  };
+  res.json({products: products.map(product => product.toObject({getters:true}))})
+}
 
 const getProductById = async (req, res, next) => {
   const productId = req.params.pid; //{pid: 'p1'}
@@ -31,13 +33,12 @@ const getProductById = async (req, res, next) => {
 };
 
 const getProductsUserById = async (req, res, next) => {
-  const userId = req.params.uid; //{uid: 'u1'}
+  const userId = req.params.uid; 
   let products;
 
   try {
     products = await Product.find({ creator: userId });
   } catch (err) {
-    console.log(products);
     return next(new HttpError("Couldnt find products of user", 404));
   }
 
@@ -52,7 +53,7 @@ const getProductsUserById = async (req, res, next) => {
 const createProduct = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new HttpError("Invalid Data", 422);
+    return next(new HttpError("Invalid Data", 422));
   }
   const { name, type, price, amount, creator } = req.body;
   const { stock, ordered, preOrdered } = amount;
@@ -70,9 +71,26 @@ const createProduct = async (req, res, next) => {
     creator,
   });
 
+  let supplier;
+
   try {
-    await createdProduct.save();
+    supplier = await Supplier.findById(creator);
+    if (!supplier) {
+      return next(new HttpError("UserID doesnt exits", 404));
+    }
   } catch (err) {
+    return next(new HttpError("Please try the userID again", 404));
+  }
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdProduct.save({ session: sess });
+    supplier.products.push(createdProduct);
+    await supplier.save({ session: sess });
+    await sess.commitTransaction();
+  } catch (err) {
+    console.log(err);
     return next(new HttpError("Creating product failed", 500));
   }
 
@@ -82,7 +100,7 @@ const createProduct = async (req, res, next) => {
 const updateProduct = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new HttpError("Invalid Updated Data", 422);
+    return next(new HttpError("Invalid Updated Data", 422));
   }
   const { name, type, price, amount } = req.body;
   const { stock, ordered, preOrdered } = amount;
@@ -113,24 +131,29 @@ const updateProduct = async (req, res, next) => {
 };
 
 const deleteProduct = async (req, res, next) => {
-  const productId = req.params.pid;
-  let product;
-
+  const productId = req.params.uid;
   try {
-    product = await Product.findById(productId);
-
+    const product = await Product.findById(productId).populate("creator");
     if (!product) {
       return next(new HttpError("Product not found", 404));
     }
 
-    await product.remove();
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    product.creator.products.pull(product);
+
+    await product.creator.save({ session: sess });
+    await product.deleteOne({ session: sess });
+    await sess.commitTransaction();
+
     res.status(200).json({ message: "Deleted Product" });
   } catch (error) {
+    console.log(error);
     return next(new HttpError("Deleting product failed", 500));
   }
 };
 
-
+exports.getProducts = getProducts;
 exports.getProductById = getProductById;
 exports.getProductsUserById = getProductsUserById;
 exports.createProduct = createProduct;

@@ -1,67 +1,114 @@
 const uuid = require("uuid");
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
+const Supplier = require("../models/supplier");
+const { default: mongoose } = require("mongoose");
 
-let DUMMY_USERS = [
-  {
-    id: "u1",
-    fullName: "Juicy World",
-    email: "juicy@gmail.com",
-    password: "sad123",
-    address: "East Clinton",
-    personalNum: 12225006201,
-    phoneNumber: 49576876,
-    role: "admin",
-  },
-];
 
-const getUsers = (req, res, next) => {
-  res.json({ user: DUMMY_USERS });
+const getUsers = async (req, res, next) => {
+  let suppliers;
+  try {
+    suppliers = await Supplier.find({}, "-password");
+  } catch (err) {
+    return next(new HttpError("Couldnt get users", 500));
+  }
+  res.json({
+    suppliers: suppliers.map((supplier) =>
+      supplier.toObject({ getters: true })
+    ),
+  });
 };
 
-const signup = (req, res, next) => {
-  const errors= validationResult(req);
-  if(!errors.isEmpty()){
-    throw new HttpError("Invalid data for user", 422);
+const signup = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(new HttpError("Invalid data for user", 422));
   }
-  const { fullName, email, password, address, personalNum, phoneNumber, role } =
-    req.body;
-
-    const userExists = DUMMY_USERS.find(u =>u.email === email);
-    if(userExists){
-      throw new HttpError('User already exists', 422);
-    }
-
-  const createdUser = {
-    id: uuid.v4(),
+  const {
     fullName,
     email,
     password,
     address,
     personalNum,
     phoneNumber,
-    role,
-  };
-  DUMMY_USERS.push(createdUser);
-  res.status(201).json({ user: createdUser });
-};
-
-const login = (req, res, next) => {
-    const {  email, password} = req.body;
-    const identifiedUser = DUMMY_USERS.find((p)=> p.email === email)
-    if(!identifiedUser || identifiedUser.password !== password){
-        throw new HttpError('Wrong credentials', 401);
-    }
-    res.json({message: 'Logged in'});
-};
-
-const deleteUser = (req, res, next) => {
-  const userId = req.params.uid;
-  if (!DUMMY_USERS.find(u => u.id === userId)) {
-    throw(new HttpError("Couldnt find the product", 404));
+    
+  } = req.body;
+  let userExists;
+  try {
+    userExists = await Supplier.findOne({ email: email });
+  } catch (error) {
+    return next(
+      new HttpError("There was an issue registering try again!", 500)
+    );
   }
-  DUMMY_USERS = DUMMY_USERS.filter((p) => p.id !== userId);
-  res.status(200).json({ message: "Deleted User" });
+
+  if (userExists) {
+    return next(new HttpError("User already exists", 422));
+  }
+
+  const createdUser = new Supplier({
+    id: uuid.v4(),
+    fullName,
+    email,
+    password,
+    image:
+      "https://imgs.search.brave.com/PzngAPChR2G1EghyNpeb6l57-C-wwF0B_VXbrqZORFw/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA2LzE5LzI2LzQ2/LzM2MF9GXzYxOTI2/NDY4MF94MlBCZEdM/RjU0c0ZlN2tUQnRB/dlpuUHlYZ3ZhUncw/WS5qcGc",
+    address,
+    personalNum,
+    phoneNumber,
+    products: []
+  });
+  try {
+    await createdUser.save();
+  } catch (err) {
+    return next(new HttpError("Creating user failed", 500));
+  }
+
+
+  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+};
+
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  let userExists;
+  try {
+    userExists = await Supplier.findOne({ email: email });
+  } catch (error) {
+    return next(new HttpError("Login failed!", 500));
+  }
+
+  if (!userExists || userExists.password !== password) {
+    return next(new HttpError("Wrong credentials", 401));
+  }
+  res.json({ message: "Logged in" });
+};
+
+const deleteUser = async (req, res, next) => {
+  const userId = req.params.uid;
+  try{
+    const supplier = await Supplier.findById(userId).populate('products');
+
+    if(!supplier){
+      return next(new HttpError('Couldnt find supplier', 404));
+    }
+
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    const productsToDelete = supplier.products;
+
+    
+    for (const product of productsToDelete) {
+      await product.deleteOne({ session: sess });
+    }
+
+    await supplier.deleteOne({ session: sess });
+    await sess.commitTransaction();
+
+    res.status(200).json({message: 'User has been deleted'})
+  }catch(err){
+    console.log(err)
+    return next(new HttpError('Deletion failed', 500));
+  }
 };
 
 exports.getUsers = getUsers;

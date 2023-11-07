@@ -4,6 +4,8 @@ const { check } = require("express-validator");
 
 const router = express.Router();
 
+router.get('/', productsController.getProducts)
+
 router.get("/:pid", productsController.getProductById);
 
 router.get("/user/:uid", productsController.getProductsUserById);
@@ -15,7 +17,7 @@ router.post(
     check("type").not().isEmpty(),
     check("creator").not().isEmpty(),
     check("price").not().isEmpty(),
-    check("amount").not().isEmpty()
+    check("amount").not().isEmpty(),
   ],
   productsController.createProduct
 );
@@ -26,11 +28,11 @@ router.patch(
     check("name").not().isEmpty(),
     check("type").not().isEmpty(),
     check("price").not().isEmpty(),
-    check("amount").not().isEmpty()
+    check("amount").not().isEmpty(),
   ],
   productsController.updateProduct
 );
 
-router.delete("/:pid", productsController.deleteProduct);
+router.delete("/:uid", productsController.deleteProduct);
 
 module.exports = router;
