@@ -8,6 +8,7 @@ import {
 import Dashboard from "../../../dashboard/Dashboard.js";
 import User from "../../../user/User.js";
 import ProductsList from "../../../dashboard/components/products/ProductsList.js";
+import SupplierProducts from "../../../dashboard/components/suppliers/SupplierProducts.js";
 
 const NavLinks = () => {
   return (
@@ -21,6 +22,9 @@ const NavLinks = () => {
         </Route>
         <Route path="/users" exact>
           <User />
+        </Route>
+        <Route path="/:userId/products" exact>
+          <SupplierProducts />
         </Route>
         <Redirect to="/" />
       </Switch>
