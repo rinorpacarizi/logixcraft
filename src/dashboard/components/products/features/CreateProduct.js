@@ -1,66 +1,55 @@
 import React, { useState } from "react";
-import { useReducer } from "react";
 import { Form, Button } from "semantic-ui-react";
 
-const formReducer = (state,action)=>{
-    switch(action.type){
-        case 'UPDATE':
-            return{
-                ...state,
-                inputs:{
-                    ...state.inputs,
-                    [action.id]:{value: action.value}
-                }
-            };
-        default:
-            return state;
-    }
-}
-
-
 const CreateProduct = (props) => {
-  const [initialState, dispatch] = useReducer(formReducer, {
-    inputs:{
-        id: "",
-        name: "",
-        image: "",
-        price: "",
-        amount: { stock: 0, preOrdered: 0 },
-        creator: "", 
-    }});
+  const [product, setProduct] = useState({
+    id: "",
+    name: "",
+    image: "",
+    price: "",
+    amount: { stock: 0, preOrdered: 0 },
+    creator: "",
+  });
+
+  const changeSubmit = event =>{
+    event.preventDefault();
+
+  }
+
   const changeHandler = (event) => {
-    dispatch({ type: "UPDATE", val: event.target.value });
+    const { name, value } = event.target;
+    console.log(value)
+    setProduct({ ...product, [name]: value });
+  };
+
+  const cancelHandler = () => {
+    props.closeForm(); 
   };
 
   return (
     <Form
-      onSubmit={"do smth"}
+      onSubmit={changeSubmit}
       autoComplete="off"
       style={{ width: "25rem", position: "relative", left: "6rem" }}
     >
       <label>Name</label>
-      <Form.Input value={initialState.name} name="name" onChange={props.closeForm} />
-      <label>Type</label>
-      <Form.Input value={initialState.type} name="type" onChange={props.closeForm} />
+      <Form.Input value={product.name} name="name" onChange={changeHandler} />
+      <label>Trype</label>
+      <Form.Input value={product.type} name="type" onChange={changeHandler} />
       <label>Stock</label>
       <Form.Input
-        value={initialState.amount.stock}
-        name="phoneNum"
-        onChange={initialState.closeForm}
+        value={product.amount.stock}
+        name="stock"
+        onChange={changeHandler}
       />
-      <label>Stock</label>
+      <label>Pre-Ordered</label>
       <Form.Input
-        value={initialState.amount.stock}
-        name="phoneNum"
-        onChange={initialState.amount.preOrdered}
+        value={product.amount.preOrdered}
+        name="preOrdered"
+        onChange={changeHandler}
       />
       <Button floated="right" positive type="submit" content="Edit" />
-      <Button
-        onClick={initialState.closeForm}
-        floated="left"
-        type="submit"
-        content="Cancel"
-      />
+      <Button floated="left" type="button" content="Cancel" onClick={cancelHandler} />
     </Form>
   );
 };
