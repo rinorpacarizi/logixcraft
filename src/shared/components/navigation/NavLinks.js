@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -7,30 +7,27 @@ import {
 } from "react-router-dom/cjs/react-router-dom.min";
 import Dashboard from "../../../dashboard/Dashboard.js";
 import User from "../../../user/User.js";
-import ProductsList from "../../../dashboard/components/products/ProductsList.js";
 import SupplierProducts from "../../../dashboard/components/suppliers/SupplierProducts.js";
 import Authenticate from "../../../user/components/Authenticate.js";
 import { AuthContext } from "../context/auth-context.js";
+import Products from "../../../dashboard/components/products/Products.js";
+import { useAuth } from "../../hooks/auth-hook.js";
+
 
 const NavLinks = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {token, login, logout, userId}= useAuth();
 
-  const login = useCallback(() => {
-    setIsLoggedIn(true);
-  });
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
-  });
+
   let routes;
 
-  if (isLoggedIn) {
+  if (token) {
     routes = (
       <Switch>
         <Route path="/" exact>
           <Dashboard />
         </Route>
         <Route path="/products" exact>
-          <ProductsList />
+          <Products />
         </Route>
         <Route path="/users" exact>
           <User />
@@ -54,10 +51,15 @@ const NavLinks = () => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}>
-      <Router>
-          {routes}
-      </Router>
+      value={{
+        isLoggedIn: !!token,
+        token: token,
+        userId: userId,
+        login: login,
+        logout: logout,
+      }}
+    >
+      <Router>{routes}</Router>
     </AuthContext.Provider>
   );
 };

@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require('path');
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const productRoutes = require("./routes/products-routes");
@@ -9,6 +12,14 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/uploads/images', express.static(path.join('uploads','images')))
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  next();
+});
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
@@ -18,6 +29,11 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
   if (res.headerSent) {
     return next(error);
   }
@@ -26,5 +42,13 @@ app.use((error, req, res, next) => {
     .json({ message: error.message || "Unknown error occured" });
 });
 
-mongoose.connect('mongodb+srv://rinor:admin1212@cluster0.2smdkhv.mongodb.net/database?retryWrites=true&w=majority').then(()=>{app.listen(5000);}).catch(err =>{console.log(err)});
-
+mongoose
+  .connect(
+    "mongodb+srv://rinor:admin1212@cluster0.2smdkhv.mongodb.net/database?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    app.listen(5000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

@@ -1,24 +1,70 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { Form, Button } from "semantic-ui-react";
+//import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../../../../shared/components/context/auth-context";
 
 const EditProduct = (props) => {
-  console.log(props);
+  const auth = useContext(AuthContext);
+  const [product, setProduct] = useState({
+    id: props.product.id,
+    name: props.product.name,
+    image: props.product.image,
+    price: props.product.price,
+    type: props.product.type,
+    stock: props.product.stock,
+    preOrdered: props.product.preOrdered,
+    creator: auth.userId,
+  });
+ // const history = useHistory();
+  
+  const changeHandler = (event) => {
+        setProduct({ ...product, [event.target.name]: event.target.value });
+  };
+
+  const updateProductHandle = async (event) => {
+    event.preventDefault();
+    await axios
+      .patch(`http://localhost:5000/api/products/${props.product.id}`,product, {headers: {
+        Authorization: 'Bearer ' + auth.token
+      }})
+      .then(() => {
+        //history.push("/" + auth.userId + "/products");
+        props.closeForm();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <Form
-        onSubmit={"do smth"}
+        onSubmit={updateProductHandle}
         autoComplete="off"
         style={{ width: "25rem", position: "relative", left: "6rem" }}
       >
         <label>Name</label>
-        <Form.Input value={props.name} name="name" onChange={props.closeForm} />
+        <Form.Input value={product.name} name="name" onChange={changeHandler} />
         <label>Type</label>
-        <Form.Input value={props.type} name="type" onChange={props.closeForm} />
+        <Form.Input value={product.type} name="type" onChange={changeHandler} />
         <label>Stock</label>
         <Form.Input
-          value={props.amount.stock}
-          name="phoneNum"
-          onChange={props.closeForm}
+          value={product.stock}
+          name="stock"
+          onChange={changeHandler}
+        />
+        <label>PreOreded</label>
+        <Form.Input
+          value={product.preOrdered}
+          name="preOrdered"
+          onChange={changeHandler}
+        />
+        <label>Price</label>
+        <Form.Input
+          value={product.price}
+          name="price"
+          onChange={changeHandler}
         />
         <Button floated="right" positive type="submit" content="Edit" />
         <Button

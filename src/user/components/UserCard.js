@@ -6,7 +6,7 @@ const UserCard = (props) => {
   return (
     <Card>
       <Link to={`/${props.id}/products`}>
-        <Image src={props.image} alt={props.fullName} wrapped ui={false} />
+        <Image src={`http://localhost:5000/${props.image}`} alt={props.fullName} wrapped ui={false} />
         <Card.Content>
           <Card.Header>{props.fullName}</Card.Header>
           <Card.Description>{props.email}</Card.Description>

@@ -5,7 +5,6 @@ export default function Dashboard() {
   return (
     <div>
       <NavigationBar/>
-
     </div>
   )
 }

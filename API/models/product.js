@@ -7,11 +7,9 @@ const productSchema = new Schema({
   type: { type: String, require: true },
   image: { type: String, require: true },
   price: { type: Number, require: true },
-  amount: {
-    stock: { type: Number, require: true },
-    ordered: { type: Number, require: true },
-    preOrdered: { type: Number, require: true },
-  },
+  stock: { type: Number, require: true },
+  ordered: { type: Number, require: true },
+  preOrdered: { type: Number, require: true },
   creator: { type: mongoose.Types.ObjectId, require: true, ref: "Supplier" },
 });
 

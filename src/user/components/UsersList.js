@@ -3,7 +3,7 @@ import UserCard from "./UserCard";
 import { Card } from "semantic-ui-react";
 
 const UsersList = (props) => {
-  if (props.items.length === 0) {
+  if (props.users.length === 0) {
     return (
       <div>
         <h2>No users found</h2>
@@ -12,7 +12,7 @@ const UsersList = (props) => {
   }
   return (
     <Card>
-      {props.items.map((user) => (
+      {props.users.map((user) => (
         <UserCard
           key={user.id}
           id={user.id}

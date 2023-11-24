@@ -1,3 +1,4 @@
+const fs = require('fs'); 
 const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
@@ -6,15 +7,17 @@ const Supplier = require("../models/supplier");
 const supplier = require("../models/supplier");
 const product = require("../models/product");
 
-const getProducts= async (req,res,next) =>{
+const getProducts = async (req, res, next) => {
   let products;
-  try{
+  try {
     products = await Product.find();
-  }catch(err){
-    return next(new HttpError('Couldnt find products', 500))
-  };
-  res.json({products: products.map(product => product.toObject({getters:true}))})
-}
+  } catch (err) {
+    return next(new HttpError("Couldnt find products", 500));
+  }
+  res.json({
+    products: products.map((product) => product.toObject({ getters: true })),
+  });
+};
 
 const getProductById = async (req, res, next) => {
   const productId = req.params.pid; //{pid: 'p1'}
@@ -33,7 +36,7 @@ const getProductById = async (req, res, next) => {
 };
 
 const getProductsUserById = async (req, res, next) => {
-  const userId = req.params.uid; 
+  const userId = req.params.uid;
   let products;
 
   try {
@@ -42,9 +45,9 @@ const getProductsUserById = async (req, res, next) => {
     return next(new HttpError("Couldnt find products of user", 404));
   }
 
-  if (!products || products.length === 0) {
-    return next(new HttpError("Couldnt find the products by that UserID", 404));
-  }
+  // if (!products || products.length === 0) {
+  //   return next(new HttpError("Couldnt find the products by that UserID", 404));
+  // }
   res.json({
     products: products.map((product) => product.toObject({ getters: true })),
   });
@@ -55,26 +58,19 @@ const createProduct = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid Data", 422));
   }
-  const { name, type, price, amount, creator } = req.body;
-  const { stock, ordered, preOrdered } = amount;
+  const { name, type, price, stock, preOrdered } = req.body;
   const createdProduct = new Product({
     name,
     type,
-    image:
-      "https://imgs.search.brave.com/PBTntkTeAqnFnCRZR53htMeFVAA1RBhX2bTGJ-9Vrq8/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9xdWlj/a2J1dGlrLmltZ2l4/Lm5ldC8xODQwVi9w/cm9kdWN0cy82MzEy/MTYyMWI2NmViLmpw/ZWc_YXV0bz1mb3Jt/YXQ",
+    image: req.file.path,
     price,
-    amount: {
-      stock,
-      ordered,
-      preOrdered,
-    },
-    creator,
+    stock,
+    preOrdered,
+    creator: req.userData.userId,
   });
-
   let supplier;
-
   try {
-    supplier = await Supplier.findById(creator);
+    supplier = await Supplier.findById(req.userData.userId);
     if (!supplier) {
       return next(new HttpError("UserID doesnt exits", 404));
     }
@@ -90,7 +86,6 @@ const createProduct = async (req, res, next) => {
     await supplier.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
-    console.log(err);
     return next(new HttpError("Creating product failed", 500));
   }
 
@@ -102,8 +97,7 @@ const updateProduct = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid Updated Data", 422));
   }
-  const { name, type, price, amount } = req.body;
-  const { stock, ordered, preOrdered } = amount;
+  const { name, type, price, stock, preOrdered, creator } = req.body;
   const productId = req.params.pid;
 
   let product;
@@ -114,12 +108,15 @@ const updateProduct = async (req, res, next) => {
     return next(new HttpError("Updating product failed", 500));
   }
 
+  if(product.creator.toString() !== req.userData.userId){
+    return next(new HttpError("You cant edit this place", 401));
+  }
+
   product.name = name;
   product.type = type;
   product.price = price;
-  product.amount.stock = stock;
-  product.amount.ordered = ordered;
-  product.amount.preOrdered = preOrdered;
+  product.stock = stock;
+  product.preOrdered = preOrdered;
 
   try {
     await product.save();
@@ -132,25 +129,34 @@ const updateProduct = async (req, res, next) => {
 
 const deleteProduct = async (req, res, next) => {
   const productId = req.params.uid;
+  let product;
   try {
-    const product = await Product.findById(productId).populate("creator");
+    product = await Product.findById(productId).populate("creator");
     if (!product) {
       return next(new HttpError("Product not found", 404));
     }
-
+    
     const sess = await mongoose.startSession();
     sess.startTransaction();
     product.creator.products.pull(product);
-
+    
     await product.creator.save({ session: sess });
     await product.deleteOne({ session: sess });
     await sess.commitTransaction();
-
-    res.status(200).json({ message: "Deleted Product" });
+    
   } catch (error) {
-    console.log(error);
     return next(new HttpError("Deleting product failed", 500));
   }
+
+if(product.creator.id !== req.userData.userId){
+  return next(new HttpError("You cant delete this place", 401));
+}
+
+  const imagePath = product.image;
+  fs.unlink(imagePath, err =>{
+    console.log(err);
+  })
+  res.status(200).json({ message: "Deleted Product" });
 };
 
 exports.getProducts = getProducts;
