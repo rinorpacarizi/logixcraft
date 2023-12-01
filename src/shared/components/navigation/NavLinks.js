@@ -12,32 +12,52 @@ import Authenticate from "../../../user/components/Authenticate.js";
 import { AuthContext } from "../context/auth-context.js";
 import Products from "../../../dashboard/components/products/Products.js";
 import { useAuth } from "../../hooks/auth-hook.js";
+import Orders from "../../../dashboard/components/orders/Orders.js";
+import Reports from "../../../dashboard/components/Reports/Reports.js";
 
 
 const NavLinks = () => {
-  const {token, login, logout, userId}= useAuth();
-
-
+  const {token, login, logout, userId, role}= useAuth();
   let routes;
 
   if (token) {
-    routes = (
-      <Switch>
-        <Route path="/" exact>
-          <Dashboard />
-        </Route>
-        <Route path="/products" exact>
-          <Products />
-        </Route>
-        <Route path="/users" exact>
-          <User />
-        </Route>
-        <Route path="/:userId/products" exact>
-          <SupplierProducts />
-        </Route>
-        <Redirect to="/" />
-      </Switch>
-    );
+    if(role === "Supplier"){
+      routes = (
+        <Switch>
+          <Route path="/" exact>
+            <Dashboard />
+          </Route>
+          <Route path="/products" exact>
+            <Products />
+          </Route>
+          <Route path="/users" exact>
+            <User />
+          </Route>
+          <Route path="/:userId/products" exact>
+            <SupplierProducts />
+          </Route>
+          <Redirect to="/" />
+        </Switch>
+      );
+    }else if(role === "Customer"){
+      routes = (
+        <Switch>
+          <Route path="/" exact>
+            <Dashboard />
+          </Route>
+          <Route path="/products" exact>
+            <Products />
+          </Route>
+          <Route path="/users" exact>
+            <Orders />
+          </Route>
+          <Route path="/:userId/products" exact>
+            <Reports />
+          </Route>
+          <Redirect to="/" />
+        </Switch>
+      );
+    }
   } else {
     routes = (
       <>
@@ -55,6 +75,7 @@ const NavLinks = () => {
         isLoggedIn: !!token,
         token: token,
         userId: userId,
+        role:role,
         login: login,
         logout: logout,
       }}

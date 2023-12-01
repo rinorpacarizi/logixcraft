@@ -3,6 +3,7 @@ import { Form, Button } from "semantic-ui-react";
 //import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../../../shared/components/context/auth-context";
+import ImageUpload from "../../../../shared/components/Form-Elements/ImageUpload";
 
 const EditProduct = (props) => {
   const auth = useContext(AuthContext);
@@ -20,6 +21,9 @@ const EditProduct = (props) => {
   
   const changeHandler = (event) => {
         setProduct({ ...product, [event.target.name]: event.target.value });
+  };
+  const handleImageUpload = (id, pickedFile) => {
+    setProduct({ ...product, image: pickedFile });
   };
 
   const updateProductHandle = async (event) => {
@@ -44,6 +48,8 @@ const EditProduct = (props) => {
         autoComplete="off"
         style={{ width: "25rem", position: "relative", left: "6rem" }}
       >
+        <label>Image</label>
+      <ImageUpload id="image" name="image" onChange={handleImageUpload} />
         <label>Name</label>
         <Form.Input value={product.name} name="name" onChange={changeHandler} />
         <label>Type</label>

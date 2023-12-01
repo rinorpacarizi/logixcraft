@@ -12,6 +12,7 @@ const UserCard = (props) => {
           <Card.Description>{props.email}</Card.Description>
           <Card.Meta>{props.personalNum}</Card.Meta>
           <Card.Meta>{props.phoneNumber}</Card.Meta>
+          <Card.Meta>{props.role}</Card.Meta>
         </Card.Content>
       </Link>
     </Card>

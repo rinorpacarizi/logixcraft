@@ -8,7 +8,7 @@ const User =  () => {
    useEffect(()=>{
     const getusers = async ()=>{
     await axios.get('http://localhost:5000/api/users').then(response =>{
-      setUsers(response.data.suppliers);
+      setUsers(response.data.users);
     })}
     getusers();
   },[]);

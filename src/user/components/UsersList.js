@@ -21,6 +21,7 @@ const UsersList = (props) => {
           email={user.email}
           personalNum={user.personalNum}
           phoneNumber={user.phoneNumber}
+          role={user.role}
         />
       ))}
     </Card>

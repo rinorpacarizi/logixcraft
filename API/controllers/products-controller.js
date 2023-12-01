@@ -4,6 +4,7 @@ const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const Product = require("../models/product");
 const Supplier = require("../models/supplier");
+const User = require("../models/user");
 const supplier = require("../models/supplier");
 const product = require("../models/product");
 
@@ -20,7 +21,7 @@ const getProducts = async (req, res, next) => {
 };
 
 const getProductById = async (req, res, next) => {
-  const productId = req.params.pid; //{pid: 'p1'}
+  const productId = req.params.pid;
   let product;
 
   try {
@@ -59,6 +60,17 @@ const createProduct = async (req, res, next) => {
     return next(new HttpError("Invalid Data", 422));
   }
   const { name, type, price, stock, preOrdered } = req.body;
+ 
+  let supplier;
+  try {
+    supplier = await Supplier.findOne({ user: req.userData.userId });
+    if (!supplier) {
+      return next(new HttpError("Supplier not found", 404));
+    }
+  } catch (err) {
+    return next(new HttpError("Error finding supplier", 500));
+  }
+
   const createdProduct = new Product({
     name,
     type,
@@ -66,11 +78,10 @@ const createProduct = async (req, res, next) => {
     price,
     stock,
     preOrdered,
-    creator: req.userData.userId,
+    creator: supplier.user, 
   });
-  let supplier;
   try {
-    supplier = await Supplier.findById(req.userData.userId);
+    supplier = await User.findById(req.userData.userId);
     if (!supplier) {
       return next(new HttpError("UserID doesnt exits", 404));
     }
@@ -97,7 +108,7 @@ const updateProduct = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid Updated Data", 422));
   }
-  const { name, type, price, stock, preOrdered, creator } = req.body;
+  const { name, type, price, stock, preOrdered } = req.body;
   const productId = req.params.pid;
 
   let product;
@@ -109,7 +120,7 @@ const updateProduct = async (req, res, next) => {
   }
 
   if(product.creator.toString() !== req.userData.userId){
-    return next(new HttpError("You cant edit this place", 401));
+    return next(new HttpError("You cant edit this product", 401));
   }
 
   product.name = name;
