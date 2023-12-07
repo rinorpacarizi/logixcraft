@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get("/", usersController.getUsers);
 
+router.get("/suppliers", usersController.getUserByRole);
+
 router.get("/uid", usersController.getUserById);
 
 router.post(
@@ -19,7 +21,7 @@ router.post(
     check("address"),
     check("personalNum"),
     check("phoneNumber"),
-    check("role")
+    check("role"),
   ],
   usersController.signup
 );

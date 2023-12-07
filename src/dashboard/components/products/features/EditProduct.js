@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button,TextArea } from "semantic-ui-react";
 //import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../../../shared/components/context/auth-context";
@@ -14,7 +14,7 @@ const EditProduct = (props) => {
     price: props.product.price,
     type: props.product.type,
     stock: props.product.stock,
-    preOrdered: props.product.preOrdered,
+    description: props.product.description,
     creator: auth.userId,
   });
  // const history = useHistory();
@@ -60,16 +60,16 @@ const EditProduct = (props) => {
           name="stock"
           onChange={changeHandler}
         />
-        <label>PreOreded</label>
-        <Form.Input
-          value={product.preOrdered}
-          name="preOrdered"
-          onChange={changeHandler}
-        />
         <label>Price</label>
         <Form.Input
           value={product.price}
           name="price"
+          onChange={changeHandler}
+        />
+         <label>Description</label>
+        <TextArea
+          value={product.description}
+          name="description"
           onChange={changeHandler}
         />
         <Button floated="right" positive type="submit" content="Edit" />

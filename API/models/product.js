@@ -9,7 +9,7 @@ const productSchema = new Schema({
   price: { type: Number, require: true },
   stock: { type: Number, require: true },
   ordered: { type: Number, require: true },
-  preOrdered: { type: Number, require: true },
+  description: { type: String, require: true },
   creator: { type: mongoose.Types.ObjectId, require: true, ref: "Supplier" },
 });
 

@@ -1,13 +1,8 @@
-const fs = require('fs'); 
 const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const Product = require("../models/product");
-const Supplier = require("../models/supplier");
-const User = require("../models/user");
 const Order = require("../models/order");
-const supplier = require("../models/supplier");
-const product = require("../models/product");
 
 const getOrders = async (req, res, next) => {
   let orders;
@@ -60,7 +55,7 @@ const createOrder = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid Data", 422));
   }
-  const { amount, price,  status } = req.body;
+  const { amount, price, status } = req.body;
  
   let product;
   try {

@@ -1,80 +1,85 @@
+import _ from 'lodash'
 import axios from "axios";
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button, Dropdown } from "semantic-ui-react";
 import { AuthContext } from "../../../../shared/components/context/auth-context";
-import ImageUpload from "../../../../shared/components/Form-Elements/ImageUpload";
 
-const CreateProduct = (props) => {
+const CreateOrder = (props) => {
   const auth = useContext(AuthContext);
 
-  const [product, setProduct] = useState({
+  const [order, setOrder] = useState({
     id: "",
-    name: "",
-    image: "",
-    price: "",
-    stock:0,
-    preOrdered:0,
+    amount: 0,
+    image: props.product.image,
+    status: "Awaiting delivery",
     creator: auth.userId,
+    product: props.product,
+    price: props.product.price,
   });
   const history = useHistory();
+
+  const getOptions = (number, prefix = 'Amount ') =>
+  _.times(number, (index) => ({
+    key: index,
+    text: `${prefix}${index}`,
+    value: index,
+  }));
   
-  const changeHandler = (event) => {
-      setProduct({ ...product, [event.target.name]: event.target.value });
+
+
+  const calculatePrice = (amount) => {
+    const productPrice = props.product.price; 
+    return amount * productPrice;
   };
 
-  const createProductHandler = async (event) => {
+  const changeHandler = (event, { name, value }) => {
+    const newAmount = value;
+    const newPrice = calculatePrice(newAmount);
+    setOrder({ ...order, [name]: newAmount, price: newPrice });
+  };
+
+  const createOrderHandler = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.append("name", product.name);
-    formData.append("type", product.type);
-    formData.append("price", product.price);
-    formData.append("image", product.image);
-    formData.append("stock",product.stock); 
-    formData.append("preOrdered",product.preOrdered); 
+    formData.append("amount", order.amount);
+    formData.append("image", order.image);
+    formData.append("status", order.status);
+    formData.append("creator", order.creator);
+    formData.append("product",order.product);
+    formData.append("price", order.price); 
     console.log(formData.values);
     await axios
-      .post("http://localhost:5000/api/products/", formData, {headers: {
+      .post("http://localhost:5000/api/orders/", formData, {headers: {
         Authorization: 'Bearer ' + auth.token
       }})
       .then((response) => {
         console.log(response);
         if (response.status !== 201) {
-          throw new Error("Product creation failed");
+          throw new Error("Order creation failed");
         }
-        history.push("/");
+        history.push("/products");
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  const handleImageUpload = (id, pickedFile) => {
-    setProduct({ ...product, image: pickedFile });
-  };
-
   const cancelHandler = () => {
     props.closeForm();
   };
 
   return (
     <Form
-      onSubmit={createProductHandler}
+      onSubmit={createOrderHandler}
       autoComplete="off"
       style={{ width: "25rem", position: "relative", left: "6rem" }}
     >
-      <label>Name</label>
-      <Form.Input name="name" onChange={changeHandler} />
-      <label>Type</label>
-      <Form.Input name="type" onChange={changeHandler} />
+      <label>{props.product.name}</label>
+      <label>Amount</label>
+      <Dropdown scrolling options={getOptions(props.product.order)} name="amount" onChange={changeHandler} />
       <label>Image</label>
-      <ImageUpload id="image" name="image" onChange={handleImageUpload} />
-      <label>Stock</label>
-      <Form.Input name="stock" onChange={changeHandler} />
-      <label>Pre-Ordered</label>
-      <Form.Input name="preOrdered" onChange={changeHandler} />
-      <label>Price</label>
-      <Form.Input name="price" onChange={changeHandler} />
+      <img src={order.image}  />
+      <label>Price :{order.price}</label>
       <Button floated="right" positive type="submit" content="Create" />
       <Button
         floated="left"
@@ -86,4 +91,4 @@ const CreateProduct = (props) => {
   );
 };
 
-export default CreateProduct;
+export default CreateOrder;

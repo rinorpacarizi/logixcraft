@@ -73,11 +73,10 @@ const Authenticate = () => {
       await axios
         .post("http://localhost:5000/api/users/signup", formData)
         .then((response) => {
-
           if (response.status !== 201) {
             throw new Error("User creation failed"); //not working
           }
-          auth.login(response.data.userId, response.data.role);
+          auth.login(response.data.userId,response.data.token, response.data.role);
         })
         .catch((err) => {
           console.log(err);

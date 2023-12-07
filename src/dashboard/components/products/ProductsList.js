@@ -5,7 +5,6 @@ import { Modal, Button } from "semantic-ui-react";
 
 const ProductsList = (props) => {
   const [openCreate, setOpenCreate] = useState(false);
-//  const [selectedProduct, setSekectedProduct] = useState(undefined);
 
   const handleCreateClose = () => {
     openCreate ? setOpenCreate(false) : setOpenCreate(true);

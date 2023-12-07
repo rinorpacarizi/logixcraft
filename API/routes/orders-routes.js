@@ -34,9 +34,9 @@ router.patch(
     check("price").not().isEmpty(),
     check("status").not().isEmpty()
   ],
-  ordersController.updateProduct
+  ordersController.updateOrder
 );
 
-router.delete("/:uid", ordersController.deleteProduct);
+router.delete("/:uid", ordersController.deleteOrder);
 
 module.exports = router;

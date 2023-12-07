@@ -48,7 +48,7 @@ const NavLinks = () => {
           <Route path="/products" exact>
             <Products />
           </Route>
-          <Route path="/users" exact>
+          <Route path="/orders" exact>
             <Orders />
           </Route>
           <Route path="/:userId/products" exact>

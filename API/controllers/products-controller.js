@@ -5,8 +5,6 @@ const { validationResult } = require("express-validator");
 const Product = require("../models/product");
 const Supplier = require("../models/supplier");
 const User = require("../models/user");
-const supplier = require("../models/supplier");
-const product = require("../models/product");
 
 const getProducts = async (req, res, next) => {
   let products;
@@ -59,7 +57,7 @@ const createProduct = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid Data", 422));
   }
-  const { name, type, price, stock, preOrdered } = req.body;
+  const { name, type, price, stock, description } = req.body;
  
   let supplier;
   try {
@@ -77,11 +75,10 @@ const createProduct = async (req, res, next) => {
     image: req.file.path,
     price,
     stock,
-    preOrdered,
+    description,
     creator: supplier.user, 
   });
   try {
-    supplier = await User.findById(req.userData.userId);
     if (!supplier) {
       return next(new HttpError("UserID doesnt exits", 404));
     }
@@ -97,6 +94,9 @@ const createProduct = async (req, res, next) => {
     await supplier.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
+    console.log(err)
+    console.log(createdProduct)
+
     return next(new HttpError("Creating product failed", 500));
   }
 
@@ -108,7 +108,7 @@ const updateProduct = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid Updated Data", 422));
   }
-  const { name, type, price, stock, preOrdered } = req.body;
+  const { name, type, price, stock, description } = req.body;
   const productId = req.params.pid;
 
   let product;
@@ -127,7 +127,7 @@ const updateProduct = async (req, res, next) => {
   product.type = type;
   product.price = price;
   product.stock = stock;
-  product.preOrdered = preOrdered;
+  product.description = description;
 
   try {
     await product.save();

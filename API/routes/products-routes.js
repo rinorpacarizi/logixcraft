@@ -23,7 +23,7 @@ router.post(
     check("creator"),
     check("price").not().isEmpty(),
     check("stock").not().isEmpty(),
-    check("preOrdered").not().isEmpty(),
+    check("description").not().isEmpty(),
   ],
   productsController.createProduct
 );
@@ -35,7 +35,8 @@ router.patch(
     check("type").not().isEmpty(),
     check("price").not().isEmpty(),
     check("stock").not().isEmpty(),
-    check("preOrdered").not().isEmpty(),
+    check("description").not().isEmpty(),
+    
   ],
   productsController.updateProduct
 );

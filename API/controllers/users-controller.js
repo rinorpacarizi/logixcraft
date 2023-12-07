@@ -31,6 +31,68 @@ const getUserById = async (req, res, next) => {
   res.json({ user: user.toObject({ getters: true }) });
 };
 
+const getUserByRole = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find(
+      { role: "Supplier" });
+  } catch (err) {
+    
+    return next(new HttpError("Couldnt get role", 500));
+  }
+  const suppliers = users.map(user =>({
+    name: user.fullName,
+    image: user.image
+  }))
+  res.json({
+    users: suppliers,
+  });
+};
+
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (error) {
+    return next(new HttpError("Login failed!", 500));
+  }
+
+  if (!existingUser) {
+    return next(new HttpError("Wrong credentials", 401));
+  }
+
+  let isValidPassowrd = false;
+  try {
+    isValidPassowrd = await bcrypt.compare(password, existingUser.password);
+  } catch (err) {
+    return next(new HttpError("Couldnt login, check your credentials!", 500));
+  }
+
+  if (!isValidPassowrd) {
+    return next(new HttpError("Wrong credentials", 401));
+  }
+  let token;
+  try {
+    token = jwt.sign(
+      {
+        userId: existingUser.id,
+        email: existingUser.email,
+        role: existingUser.role,
+      },
+      "secret_code_shush",
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    return next(new HttpError("Token failed login", 500));
+  }
+  res.json({
+    userId: existingUser.id,
+    token: token,
+    role: existingUser.role,
+    email: existingUser.email,
+  });
+};
 
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
@@ -84,9 +146,7 @@ const signup = async (req, res, next) => {
     await createdUser.save();
     await createdRole.save();
   } catch (err) {
-    console.log(createdRole)
-    console.log(createdUser)
-    console.log(err)
+    console.log(err);
     return next(new HttpError("Creating user failed", 500));
   }
 
@@ -103,52 +163,12 @@ const signup = async (req, res, next) => {
 
   res
     .status(201)
-    .json({ user: createdUser.id, email: createdUser.email, token: token });
-};
-
-const login = async (req, res, next) => {
-  const { email, password } = req.body;
-  let existingUser;
-  try {
-    existingUser = await User.findOne({ email: email });
-  } catch (error) {
-    return next(new HttpError("Login failed!", 500));
-  }
-
-  if (!existingUser) {
-    return next(new HttpError("Wrong credentials", 401));
-  }
-
-  let isValidPassowrd = false;
-  try {
-    isValidPassowrd = await bcrypt.compare(password, existingUser.password);
-  } catch (err) {
-    return next(new HttpError("Couldnt login, check your credentials!", 500));
-  }
-
-  if (!isValidPassowrd) {
-    return next(new HttpError("Wrong credentials", 401));
-  }
-  let token;
-  try {
-    token = jwt.sign(
-      {
-        userId: existingUser.id,
-        email: existingUser.email,
-        role: existingUser.role,
-      },
-      "secret_code_shush",
-      { expiresIn: "1h" }
-    );
-  } catch (err) {
-    return next(new HttpError("Token failed login", 500));
-  }
-  res.json({
-    userId: existingUser.id,
-    email: existingUser.email,
-    token: token,
-    role: existingUser.role,
-  });
+    .json({
+      userId: createdUser.id,
+      token: token,
+      role: createdUser.role,
+      email: createdUser.email,
+    });
 };
 
 const deleteUser = async (req, res, next) => {
@@ -194,6 +214,7 @@ const deleteUser = async (req, res, next) => {
 
 exports.getUsers = getUsers;
 exports.getUserById = getUserById;
+exports.getUserByRole = getUserByRole;
 exports.signup = signup;
 exports.login = login;
 exports.deleteUser = deleteUser;

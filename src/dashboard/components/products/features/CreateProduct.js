@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button, TextArea } from "semantic-ui-react";
 import { AuthContext } from "../../../../shared/components/context/auth-context";
 import ImageUpload from "../../../../shared/components/Form-Elements/ImageUpload";
 
@@ -13,8 +13,8 @@ const CreateProduct = (props) => {
     name: "",
     image: "",
     price: "",
+    description: "",
     stock:0,
-    preOrdered:0,
     creator: auth.userId,
   });
   const history = useHistory();
@@ -31,7 +31,7 @@ const CreateProduct = (props) => {
     formData.append("price", product.price);
     formData.append("image", product.image);
     formData.append("stock",product.stock); 
-    formData.append("preOrdered",product.preOrdered); 
+    formData.append("description",product.description); 
     console.log(formData.values);
     await axios
       .post("http://localhost:5000/api/products/", formData, {headers: {
@@ -71,10 +71,10 @@ const CreateProduct = (props) => {
       <ImageUpload id="image" name="image" onChange={handleImageUpload} />
       <label>Stock</label>
       <Form.Input name="stock" onChange={changeHandler} />
-      <label>Pre-Ordered</label>
-      <Form.Input name="preOrdered" onChange={changeHandler} />
       <label>Price</label>
       <Form.Input name="price" onChange={changeHandler} />
+      <label>Description</label>
+      <TextArea name="description" onChange={changeHandler} />
       <Button floated="right" positive type="submit" content="Create" />
       <Button
         floated="left"
