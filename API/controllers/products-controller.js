@@ -76,7 +76,8 @@ const createProduct = async (req, res, next) => {
     price,
     stock,
     description,
-    creator: supplier.user, 
+    creator: supplier.user,
+    supplier: supplier._id
   });
   try {
     if (!supplier) {
@@ -118,7 +119,6 @@ const updateProduct = async (req, res, next) => {
   } catch {
     return next(new HttpError("Updating product failed", 500));
   }
-
   if(product.creator.toString() !== req.userData.userId){
     return next(new HttpError("You cant edit this product", 401));
   }
@@ -142,16 +142,19 @@ const deleteProduct = async (req, res, next) => {
   const productId = req.params.uid;
   let product;
   try {
-    product = await Product.findById(productId).populate("creator");
+    product = await Product.findById(productId).populate("supplier");
+
+    
     if (!product) {
       return next(new HttpError("Product not found", 404));
     }
     
+
     const sess = await mongoose.startSession();
     sess.startTransaction();
-    product.creator.products.pull(product);
+    await product.supplier.products.pull(product);
     
-    await product.creator.save({ session: sess });
+    await product.supplier.save({ session: sess });
     await product.deleteOne({ session: sess });
     await sess.commitTransaction();
     
@@ -159,14 +162,15 @@ const deleteProduct = async (req, res, next) => {
     return next(new HttpError("Deleting product failed", 500));
   }
 
-if(product.creator.id !== req.userData.userId){
-  return next(new HttpError("You cant delete this place", 401));
+if(product.creator !== req.userData.userId){
+  return next(new HttpError("You cant delete this product", 401));
 }
 
   const imagePath = product.image;
   fs.unlink(imagePath, err =>{
     console.log(err);
   })
+  console.log(imagePath)
   res.status(200).json({ message: "Deleted Product" });
 };
 

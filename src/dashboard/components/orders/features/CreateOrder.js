@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { Form, Button, Dropdown } from "semantic-ui-react";
 import { AuthContext } from "../../../../shared/components/context/auth-context";
 
+
 const CreateOrder = (props) => {
   const auth = useContext(AuthContext);
 
@@ -19,10 +20,10 @@ const CreateOrder = (props) => {
   });
   const history = useHistory();
 
-  const getOptions = (number, prefix = 'Amount ') =>
+  const getOptions = (number) =>
   _.times(number, (index) => ({
     key: index,
-    text: `${prefix}${index}`,
+    text: `${index}`,
     value: index,
   }));
   
@@ -64,9 +65,6 @@ const CreateOrder = (props) => {
         console.log(err);
       });
   };
-  const cancelHandler = () => {
-    props.closeForm();
-  };
 
   return (
     <Form
@@ -76,16 +74,16 @@ const CreateOrder = (props) => {
     >
       <label>{props.product.name}</label>
       <label>Amount</label>
-      <Dropdown scrolling options={getOptions(props.product.order)} name="amount" onChange={changeHandler} />
+      <Dropdown scrolling options={getOptions(props.product.stock)} name="amount" onChange={changeHandler} />
       <label>Image</label>
-      <img src={order.image}  />
-      <label>Price :{order.price}</label>
+      <img src={`http://localhost:5000/${props.product.image}`} />
+      <label>Price : {order.price}</label>
       <Button floated="right" positive type="submit" content="Create" />
       <Button
         floated="left"
         type="button"
         content="Cancel"
-        onClick={cancelHandler}
+        onClick={props.closeForm}
       />
     </Form>
   );

@@ -15,10 +15,10 @@ const ProductsCard = (props) => {
   const { role } = useAuth();
 
   function handleEditHandler() {
-    openEdit ? setOpenEdit(false) : setOpenEdit(true);
+    setOpenEdit(!openEdit);
   }
   function handleOrderHandler() {
-    openOrder ? setOpenOrder(false) : setOpenOrder(true);
+    setOpenOrder(!openOrder);
   }
   const deleteProductHandler = async () => {
     await axios
@@ -52,6 +52,7 @@ const ProductsCard = (props) => {
           <Card.Meta>{props.product.stock}</Card.Meta>
           <Card.Meta>{props.product.ordered}</Card.Meta>
           <Card.Meta>{props.product.description}</Card.Meta>
+          <Card.Meta>{props.product.creator}</Card.Meta>
         </Card.Content>
       </Link>
       <Item.Extra>
@@ -83,16 +84,16 @@ const ProductsCard = (props) => {
             color="red"
             content="Delete"
             //loading={target === props.id}
-            name={props.id}
+            name={props.name}
             onClick={deleteProductHandler}
             floated="right"
           />
         )}
         {role === "Customer" && (
           <Modal
-            onClose={() => setOpenEdit(false)}
-            onOpen={() => setOpenEdit(true)}
-            open={openEdit}
+            onClose={() => setOpenOrder(false)}
+            onOpen={() => setOpenOrder(true)}
+            open={openOrder}
             trigger={
               <Button
                 basic

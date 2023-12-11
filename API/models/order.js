@@ -8,7 +8,8 @@ const orderSchema = new Schema({
   price: { type: String, require: true },
   image: { type: String, require: true },
   status:{ type: String, require: true },
-  creator: { type: mongoose.Types.ObjectId, ref: "Customer", required: true },
+  creator: { type: mongoose.Types.ObjectId, ref: "User", required: true },
+  customer: { type: mongoose.Types.ObjectId, ref: "Customer", required: true },
   product: [{ type: mongoose.Types.ObjectId, require: false, ref: "Product" }],
 });
 

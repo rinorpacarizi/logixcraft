@@ -10,7 +10,8 @@ const productSchema = new Schema({
   stock: { type: Number, require: true },
   ordered: { type: Number, require: true },
   description: { type: String, require: true },
-  creator: { type: mongoose.Types.ObjectId, require: true, ref: "Supplier" },
+  creator: { type: mongoose.Types.ObjectId, require: true, ref: "User" },
+  supplier: { type: mongoose.Types.ObjectId, require: true, ref: "Supplier" },
 });
 
 module.exports = mongoose.model("Product", productSchema);

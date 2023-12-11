@@ -113,7 +113,7 @@ const updateOrder = async (req, res, next) => {
     return next(new HttpError("Updating order failed", 500));
   }
 
-  if(order.product.toString() !== req.body.product.user){
+  if(order.creator.toString() !== req.userData.userId){
     return next(new HttpError("You cant edit this order", 401));
   }
 
@@ -131,19 +131,22 @@ const updateOrder = async (req, res, next) => {
 };
 
 const deleteOrder = async (req, res, next) => {
-  const orderId = req.params.uid;
+  const orderId = req.params.oid;
   let order;
   try {
-    order = await Order.findById(orderId).populate("product");
+    order = await Order.findById(orderId).populate("customer");
+
+    
     if (!order) {
       return next(new HttpError("Order not found", 404));
     }
     
+
     const sess = await mongoose.startSession();
     sess.startTransaction();
-    order.product.orders.pull(order);
+    await order.customer.orders.pull(order);
     
-    await order.product.save({ session: sess });
+    await order.supplier.save({ session: sess });
     await order.deleteOne({ session: sess });
     await sess.commitTransaction();
     
@@ -151,11 +154,18 @@ const deleteOrder = async (req, res, next) => {
     return next(new HttpError("Deleting order failed", 500));
   }
 
-if(order.creator.toString() !== req.userData.userId){
-  return next(new HttpError("You cant delete this product", 401));
+if(order.creator !== req.userData.userId){
+  return next(new HttpError("You cant delete this order", 401));
 }
-  res.status(200).json({ message: "Deleted Product" });
+
+  const imagePath = order.image;
+  fs.unlink(imagePath, err =>{
+    console.log(err);
+  })
+  console.log(imagePath)
+  res.status(200).json({ message: "Deleted Order" });
 };
+
 
 exports.getOrders = getOrders;
 exports.getOrderById = getOrderById;

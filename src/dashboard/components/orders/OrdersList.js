@@ -8,7 +8,7 @@ const OrdersList = (props) => {
 //  const [selectedProduct, setSekectedProduct] = useState(undefined);
 
   const handleCreateClose = () => {
-    openCreate ? setOpenCreate(false) : setOpenCreate(true);
+    setOpenCreate(!openCreate);
   };
   return (
     <>
@@ -36,7 +36,7 @@ const OrdersList = (props) => {
         }
       >
         <Modal.Header>Create Order</Modal.Header>
-        <CreateOrder closeForm={handleCreateClose} />
+        <CreateOrder closeForm={() => setOpenCreate(false)} />
       </Modal>
     </>
   );
