@@ -15,7 +15,7 @@ const CreateOrder = (props) => {
     image: props.product.image,
     status: "Awaiting delivery",
     creator: auth.userId,
-    product: props.product,
+    productName: props.product.name,
     price: props.product.price,
   });
   const history = useHistory();
@@ -47,7 +47,7 @@ const CreateOrder = (props) => {
     formData.append("image", order.image);
     formData.append("status", order.status);
     formData.append("creator", order.creator);
-    formData.append("product",order.product);
+    formData.append("productName",order.productName);
     formData.append("price", order.price); 
     console.log(formData.values);
     await axios

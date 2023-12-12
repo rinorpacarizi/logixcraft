@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const Product = require("../models/product");
+const Customer = require("../models/customer");
 const Order = require("../models/order");
 
 const getOrders = async (req, res, next) => {
@@ -53,13 +54,17 @@ const getOrdersUserById = async (req, res, next) => {
 const createOrder = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log(errors)
     return next(new HttpError("Invalid Data", 422));
   }
-  const { amount, price, status } = req.body;
+  const { amount, price, status, productName } = req.body;
  
+  console.log(req.body)
   let product;
+  let customer;
   try {
-    product = await Product.findOne({ name: req.body.product.name });
+    product = await Product.findOne({ name: req.body.productName });
+    customer = await Customer.findOne({ user: req.userData.userId });
     if (!product) {
       return next(new HttpError("Product not found", 404));
     }
@@ -71,15 +76,16 @@ const createOrder = async (req, res, next) => {
     amount,
     price,
     status,
-    creator: req.userData.userId,
-    product: product.name
+    productName,
+    creator: customer.user,
+    customer: customer._id,
   });
   try {
-    product = await Product.findById(req.product.id);
     if (!product) {
       return next(new HttpError("ProductID doesnt exits", 404));
     }
   } catch (err) {
+    console.log(err)
     return next(new HttpError("Please try the productID again", 404));
   }
 

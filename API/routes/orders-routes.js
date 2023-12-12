@@ -21,7 +21,7 @@ router.post(
     check("amount").not().isEmpty(),
     check("price").not().isEmpty(),
     check("status").not().isEmpty(),
-    check("product").not().isEmpty(),
+    check("productName").not().isEmpty(),
     check("user"),
   ],
   ordersController.createOrder

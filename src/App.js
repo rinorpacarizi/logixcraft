@@ -6,6 +6,6 @@ const App = () => {
       <NavLinks />
     </div>
   );
-};
+};  
 
 export default App;
