@@ -7,7 +7,7 @@ const ProductsList = (props) => {
   const [openCreate, setOpenCreate] = useState(false);
 
   const handleCreateClose = () => {
-    openCreate ? setOpenCreate(false) : setOpenCreate(true);
+    setOpenCreate(!openCreate);
   };
   return (
     <>
@@ -15,10 +15,7 @@ const ProductsList = (props) => {
         <h2>No products found</h2>
       ) : (
         props.products.map((product) => (
-          <ProductsCard
-            key={product.id}
-            product={product}
-          />
+          <ProductsCard key={product.id} product={product} />
         ))
       )}
       <Modal
