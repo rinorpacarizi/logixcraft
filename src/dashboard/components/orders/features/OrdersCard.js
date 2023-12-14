@@ -10,7 +10,7 @@ const OrdersCard = (props) => {
   const auth = useContext(AuthContext);
 
   function handleEditClose() {
-    openEdit ? setOpenEdit(false) : setOpenEdit(true);
+     setOpenEdit(!openEdit);
   }
   const deleteOrderHandler = async () => {
     await axios
@@ -21,22 +21,18 @@ const OrdersCard = (props) => {
         console.log(err);
       });
   };
-
-  if (!props.order) {
-    return <h2>No order</h2>;
-  }
   return (
     <Card>
       <Link to={`/orders/${props.id}`}>
         <Image
           src={`http://localhost:5000/${props.order.image}`}
-          alt={props.order.product.name}
+          alt={props.order.productName}
           wrapped
           ui={false}
         />
 
         <Card.Content>
-          <Card.Meta>{props.order.product.name}</Card.Meta>
+          <Card.Meta>{props.order.productName}</Card.Meta>
           <Card.Header>{props.order.amount}</Card.Header>
           <Card.Description>{props.order.price}</Card.Description>
           <Card.Description>{props.order.status}</Card.Description>
@@ -58,7 +54,7 @@ const OrdersCard = (props) => {
               />
             }
           >
-            <Modal.Header>Edit Product</Modal.Header>
+            <Modal.Header>Edit Order</Modal.Header>
             <EditOrder
               closeForm={handleEditClose}
               order={props.order}

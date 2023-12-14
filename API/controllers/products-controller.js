@@ -5,6 +5,7 @@ const { validationResult } = require("express-validator");
 const Product = require("../models/product");
 const Supplier = require("../models/supplier");
 const User = require("../models/user");
+const Order = require("../models/order");
 
 const getProducts = async (req, res, next) => {
   let products;
@@ -96,8 +97,6 @@ const createProduct = async (req, res, next) => {
     await sess.commitTransaction();
   } catch (err) {
     console.log(err)
-    console.log(createdProduct)
-
     return next(new HttpError("Creating product failed", 500));
   }
 
@@ -143,15 +142,22 @@ const deleteProduct = async (req, res, next) => {
   let product;
   try {
     product = await Product.findById(productId).populate("supplier");
-
     
     if (!product) {
       return next(new HttpError("Product not found", 404));
     }
     
+    const orders = await Order.find({ productName: product.name }).populate('customer');
 
     const sess = await mongoose.startSession();
     sess.startTransaction();
+
+
+    for (const order of orders) {
+      await order.customer.orders.pull(order);
+      await order.deleteOne({ session: sess });
+    }
+
     await product.supplier.products.pull(product);
     
     await product.supplier.save({ session: sess });
@@ -159,10 +165,11 @@ const deleteProduct = async (req, res, next) => {
     await sess.commitTransaction();
     
   } catch (error) {
+    console.log(error)
     return next(new HttpError("Deleting product failed", 500));
   }
 
-if(product.creator !== req.userData.userId){
+if(product.creator.toString() !== req.userData.userId){
   return next(new HttpError("You cant delete this product", 401));
 }
 

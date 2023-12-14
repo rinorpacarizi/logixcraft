@@ -12,6 +12,7 @@ const EditOrder = (props) => {
     price: props.order.price,
     amount: props.order.amount,
     status: props.order.status,
+    productName:props.order.productName,
     creator: auth.userId,
   });
  // const history = useHistory();

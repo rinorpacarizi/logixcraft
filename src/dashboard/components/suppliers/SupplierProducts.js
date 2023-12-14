@@ -8,6 +8,7 @@ const SupplierProducts = () => {
   const [products, setProducts] = useState([]);
   const userId = useParams().userId;
 
+  
   useEffect(() => {
     const getProducts = async () => {
       await axios

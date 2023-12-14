@@ -12,17 +12,21 @@ import Authenticate from "../../../user/components/Authenticate.js";
 import { AuthContext } from "../context/auth-context.js";
 import Products from "../../../dashboard/components/products/Products.js";
 import { useAuth } from "../../hooks/auth-hook.js";
-import Orders from "../../../dashboard/components/orders/Orders.js";
 import Reports from "../../../dashboard/components/Reports/Reports.js";
-
+import OrdersList from "../../../dashboard/components/orders/OrdersList.js";
+import Orders from "../../../dashboard/components/orders/Orders.js";
+import CustomerOrders from "../../../dashboard/components/customers/CustomerOrders.js";
+import NavigationBar from "./NavigationBar.js";
 
 const NavLinks = () => {
-  const {token, login, logout, userId, role}= useAuth();
+  const { token, login, logout, userId, role } = useAuth();
   let routes;
 
   if (token) {
-    if(role === "Supplier"){
+    if (role === "Supplier") {
       routes = (
+        <>
+        <NavigationBar/>
         <Switch>
           <Route path="/" exact>
             <Dashboard />
@@ -38,9 +42,11 @@ const NavLinks = () => {
           </Route>
           <Redirect to="/" />
         </Switch>
+        </>
       );
-    }else if(role === "Customer"){
+    } else if (role === "Customer") {
       routes = (
+        
         <Switch>
           <Route path="/" exact>
             <Dashboard />
@@ -48,8 +54,8 @@ const NavLinks = () => {
           <Route path="/products" exact>
             <Products />
           </Route>
-          <Route path="/orders" exact>
-            <Orders />
+          <Route path="/orders/user/:userId" exact>
+            <CustomerOrders />
           </Route>
           <Route path="/:userId/products" exact>
             <Reports />
@@ -70,18 +76,20 @@ const NavLinks = () => {
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn: !!token,
-        token: token,
-        userId: userId,
-        role:role,
-        login: login,
-        logout: logout,
-      }}
-    >
-      <Router>{routes}</Router>
-    </AuthContext.Provider>
+    <>
+      <AuthContext.Provider
+        value={{
+          isLoggedIn: !!token,
+          token: token,
+          userId: userId,
+          role: role,
+          login: login,
+          logout: logout,
+        }}
+      >
+        <Router>{routes}</Router>
+      </AuthContext.Provider>
+    </>
   );
 };
 

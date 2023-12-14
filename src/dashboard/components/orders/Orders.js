@@ -12,6 +12,7 @@ const Orders = () => {
           .get(`http://localhost:5000/api/orders/`)
           .then((response) => {
             setOrders(response.data.orders);
+            console.log(response);
           });
       } catch (err) {
         console.log(err);
@@ -19,11 +20,13 @@ const Orders = () => {
     };
     getOrders();
   }, []);
-
   return (
     <>
       {orders.map((order) => (
+      <>
+        <p>Here</p>
         <OrdersCard key={order.id} order={order} />
+        </>
       ))}
     </>
   );

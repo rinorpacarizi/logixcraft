@@ -37,6 +37,6 @@ router.patch(
   ordersController.updateOrder
 );
 
-router.delete("/:uid", ordersController.deleteOrder);
+router.delete("/:oid", ordersController.deleteOrder);
 
 module.exports = router;

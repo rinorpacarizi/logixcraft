@@ -1,3 +1,4 @@
+const fs = require('fs'); 
 const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
@@ -36,10 +37,10 @@ const getOrderById = async (req, res, next) => {
 const getOrdersUserById = async (req, res, next) => {
   const userId = req.params.uid;
   let orders;
-
   try {
     orders = await Order.find({ creator: userId });
   } catch (err) {
+    console.log(err)
     return next(new HttpError("Couldnt find orders of user", 404));
   }
 
@@ -57,9 +58,8 @@ const createOrder = async (req, res, next) => {
     console.log(errors)
     return next(new HttpError("Invalid Data", 422));
   }
-  const { amount, price, status, productName } = req.body;
- 
-  console.log(req.body)
+  const { amount, price, status } = req.body;
+
   let product;
   let customer;
   try {
@@ -75,8 +75,9 @@ const createOrder = async (req, res, next) => {
   const createdOrder = new Order({
     amount,
     price,
+    image: product.image,
     status,
-    productName,
+    productName: product.name,
     creator: customer.user,
     customer: customer._id,
   });
@@ -139,36 +140,38 @@ const updateOrder = async (req, res, next) => {
 const deleteOrder = async (req, res, next) => {
   const orderId = req.params.oid;
   let order;
+  let product;
   try {
     order = await Order.findById(orderId).populate("customer");
+    product = await Product.findOne({ name: order.productName });
 
-    
-    if (!order) {
+    if (!order || !product ){
       return next(new HttpError("Order not found", 404));
     }
-    
+    product.stock += order.amount;
 
     const sess = await mongoose.startSession();
     sess.startTransaction();
+
+   
+    await product.save({ session: sess });
     await order.customer.orders.pull(order);
-    
-    await order.supplier.save({ session: sess });
     await order.deleteOne({ session: sess });
+
     await sess.commitTransaction();
-    
   } catch (error) {
     return next(new HttpError("Deleting order failed", 500));
   }
 
-if(order.creator !== req.userData.userId){
-  return next(new HttpError("You cant delete this order", 401));
-}
+  if (order.creator.toString() !== req.userData.userId) {
+    return next(new HttpError("You can't delete this order", 401));
+  }
 
   const imagePath = order.image;
-  fs.unlink(imagePath, err =>{
+  fs.unlink(imagePath, (err) => {
     console.log(err);
-  })
-  console.log(imagePath)
+  });
+
   res.status(200).json({ message: "Deleted Order" });
 };
 

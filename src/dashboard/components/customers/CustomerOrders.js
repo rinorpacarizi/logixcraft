@@ -7,7 +7,6 @@ import axios from "axios";
 const CustomerOrders = () => {
   const [orders, setOrders] = useState([]);
   const userId = useParams().userId;
-
   useEffect(() => {
     const getOrders = async () => {
       await axios
@@ -21,7 +20,7 @@ const CustomerOrders = () => {
     };
     getOrders();
   }, [userId]);
-
+  
   return <OrdersList orders={orders} />;
 };
 
