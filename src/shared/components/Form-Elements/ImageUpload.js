@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Icon } from "semantic-ui-react";
+import "./Form.css";
 
 const ImageUpload = (props) => {
   const [file, setFile] = useState();
@@ -16,7 +17,7 @@ const ImageUpload = (props) => {
     };
     fileReader.readAsDataURL(file);
   }, [file]);
-  
+
   const pickedHandler = (event) => {
     let pickedFile;
     if (event.target.files || event.target.files.length === 1) {
@@ -44,14 +45,18 @@ const ImageUpload = (props) => {
           {previewURL ? (
             <img src={previewURL} alt="Preview" />
           ) : (
-            <p>Please pick an image.</p>
+            <div style={{display:"flex", alignItems:"baseline", paddingLeft:"2rem"}}>
+              <p>Please pick an image.</p>
+              <Button
+                type="button"
+                className="upload-button"
+                onClick={pickImageHandler}
+              >
+                <Icon name="upload" />
+              </Button>
+            </div>
           )}
         </div>
-        <Button
-          content="Select Image"
-          type="button"
-          onClick={pickImageHandler}
-        />
       </div>
     </div>
   );

@@ -55,7 +55,6 @@ const CreateOrder = (props) => {
         Authorization: 'Bearer ' + auth.token
       }})
       .then((response) => {
-        console.log(response);
         if (response.status !== 201) {
           throw new Error("Order creation failed");
         }
@@ -73,8 +72,8 @@ const CreateOrder = (props) => {
       style={{ width: "25rem", position: "relative", left: "6rem" }}
     >
       <label>{props.product.name}</label>
-      <label>Amount</label>
-      <Dropdown scrolling options={getOptions(props.product.stock)} name="amount" onChange={changeHandler} />
+      <label>Amount: </label>
+      <Dropdown scrolling options={getOptions(props.product.stock)} name="amount" value={order.amount} onChange={changeHandler} />
       <label>Image</label>
       <img src={`http://localhost:5000/${props.product.image}`} />
       <label>Price : {order.price}</label>

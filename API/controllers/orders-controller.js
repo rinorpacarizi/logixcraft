@@ -95,6 +95,8 @@ const createOrder = async (req, res, next) => {
     sess.startTransaction();
     await createdOrder.save({ session: sess });
     product.stock -= createdOrder.amount;
+    customer.orders.push(createdOrder);
+    await customer.save({ session: sess });
   await product.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
@@ -166,11 +168,6 @@ const deleteOrder = async (req, res, next) => {
   if (order.creator.toString() !== req.userData.userId) {
     return next(new HttpError("You can't delete this order", 401));
   }
-
-  const imagePath = order.image;
-  fs.unlink(imagePath, (err) => {
-    console.log(err);
-  });
 
   res.status(200).json({ message: "Deleted Order" });
 };

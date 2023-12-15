@@ -15,6 +15,7 @@ import Reports from "../../../dashboard/components/Reports/Reports.js";
 import CustomerOrders from "../../../dashboard/components/customers/CustomerOrders.js";
 import SideBar from "./SideBar.js";
 import Homepage from "../../../homepage/Homepage.js";
+import Header from "./Header.js";
 
 const NavLinks = () => {
   const { token, login, logout, userId, role } = useAuth();
@@ -24,6 +25,7 @@ const NavLinks = () => {
     if (role === "Supplier") {
       routes = (
         <>
+        <Header/>
           <SideBar />
           <Switch>
             <Route path="/dashboard" exact>
@@ -45,6 +47,7 @@ const NavLinks = () => {
     } else if (role === "Customer") {
       routes = (
         <>
+        <Header/>
           <SideBar />
           <Switch>
             <Route path="/dashboard" exact>

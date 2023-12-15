@@ -1,0 +1,60 @@
+*{
+    margin: 0 auto;
+    
+}
+input{
+    width: 25rem !important;
+}
+.switch-button:hover{
+    background-color: white !important;
+    color: rgb(161, 137, 93) !important;
+}
+img{
+    max-width: 18rem;
+    max-height: 18rem;
+}
+.image-button{
+   display: flex  !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+i.icon{
+    padding-top: 10px;
+    width: 3em !important;
+    height: 2.7rem !important;
+    border-radius: 5px;
+    background-color: orange;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+    
+}
+.auth-button{
+    font-size: 15px !important;
+}
+
+.form-switch{
+    padding: 0rem 0rem 1rem 13rem;
+    font-size: 15px;
+}
+.form-switch>.ui.button{
+   background-color: white; 
+   color: #ff7b23;
+   font-size: 17px;
+   padding-right: 12px;
+}
+.ui.dropdown>.dropdown.icon{
+    font-size: 13px !important;
+    height: 2.5rem !important;
+    position: relative;
+    right: 10px !important;
+}
+.error-message {
+    color: red;
+    margin-bottom: 1rem;
+}  

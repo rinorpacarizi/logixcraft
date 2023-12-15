@@ -1,10 +1,17 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Header from '../shared/components/Navigation/Header'
 
 const Homepage = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
+
+  const switchModeHandler = () => {
+    setIsLogin(!isLogin);
+  };
+
   return (
     <>
-       <Header/> 
+       <Header isLogin={isLogin} switchModeHandler={switchModeHandler}/> 
     </>
   )
 }
