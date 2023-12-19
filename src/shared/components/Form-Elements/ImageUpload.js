@@ -52,7 +52,7 @@ const ImageUpload = (props) => {
                 className="upload-button"
                 onClick={pickImageHandler}
               >
-                <Icon name="upload" />
+                <Icon name="upload" className="icons" color="black"/>
               </Button>
             </div>
           )}

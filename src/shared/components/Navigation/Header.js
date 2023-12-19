@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
-import { Menu, Button, Modal } from "semantic-ui-react";
+import { Menu, Button, Modal, Image, Icon } from "semantic-ui-react";
 import { AuthContext } from "../context/auth-context";
 import Authenticate from "../../../user/components/Authenticate.js";
-import './Header.css'
+import "./css/Header.css";
+import logo from "../../../images/logo.png";
+import logoMain from "../../../images/logoPic.png"
 
 const Header = (props) => {
   const auth = useContext(AuthContext);
@@ -14,10 +16,32 @@ const Header = (props) => {
 
   return (
     <>
-      <Menu size="small">
-        <Menu.Menu position="right">
-          <Menu.Item name="home">
-            {!auth.isLoggedIn && (
+      {auth.isLoggedIn && (
+        <Menu className="header-menu">
+          <Menu.Menu position="left" className="logo-v2">
+            <Image src={logoMain} className="" />
+          </Menu.Menu>
+          <Menu.Item position="right" name="home"  className="logout-menu">
+            <Button
+              inverted
+              color="red"
+              onClick={auth.logout}
+            ><Icon name="sign-out" size="large" color="black"/></Button>
+          </Menu.Item>
+        </Menu>
+      )}
+      {!auth.isLoggedIn && (
+        <Menu size="large" className="main-menu">
+          <Menu.Menu position="left">
+            <Image src={logo} className="logo" />
+          </Menu.Menu>
+          <Menu.Menu position="center" className="center-header-div">
+            <p>Home</p>
+            <p>About</p>
+            <p>Contact Us</p>
+          </Menu.Menu>
+          <Menu.Menu>
+            <Menu.Item position="right" name="home">
               <Modal
                 onClose={() => setOpenLogin(false)}
                 onOpen={() => setOpenLogin(true)}
@@ -27,10 +51,9 @@ const Header = (props) => {
                 trigger={
                   <Button
                     basic
-                    color="green"
+                    color="orange"
                     content="Login  "
                     onClick={handleLoginClose}
-                    
                   />
                 }
               >
@@ -43,11 +66,10 @@ const Header = (props) => {
                   closeForm={handleLoginClose}
                 />
               </Modal>
-            )}
-            {auth.isLoggedIn && <Button onClick={auth.logout}>Log out</Button>}
-          </Menu.Item>
-        </Menu.Menu>
-      </Menu>
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+      )}
     </>
   );
 };

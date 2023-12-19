@@ -1,0 +1,62 @@
+.main-menu {
+    margin-left: 15vw !important;
+    margin-right: 15vw !important; 
+}
+
+.ui.modal > .header {
+    background-color: #ff7b23 !important;
+    color: white !important;
+    justify-content: center !important;
+    display: flex !important;
+    font-size: 2rem;
+}
+.header-menu{
+    height:6vh; 
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+} 
+
+.center-header-div {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    width: 57vw !important;
+    padding-top: 4rex;
+}
+
+.logo {
+    width: 8vw;
+    height: 7vh;
+    padding-left: 1rem;
+}
+
+.logo-v2{
+    background-color: rgb(32, 214, 238) !important;
+    width: 7vw;
+    box-shadow:-4px 0px 0px 4px rgba(32, 214, 238, 0.452) !important;
+}
+.logo-v2>img{
+    width: 5vw;
+    height: 5vh;
+    padding-left: 2vw;
+    padding-top: 3px;
+}
+.center-header-div> p {
+    padding-right: 3rem;
+    font-size: 20px !important;
+}
+.center-header-div> p:hover{
+    color:#ff7b23;
+    transition: 250ms;
+    font-weight: 500;
+}
+.logout-menu{
+    padding-right: 1vw !important;
+    padding-top: 1.5vh !important;
+}
+.logout-menu> button{
+    width: 2vw;
+    height: 4vh;
+    padding-right: 2rem !important;
+    display: flex !important;
+}

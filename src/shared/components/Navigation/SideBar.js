@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import {  Menu } from "semantic-ui-react";
+import { Menu, Icon } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../context/auth-context.js";
 import { useContext } from "react";
 import { useAuth } from "../../hooks/auth-hook.js";
+import "./css/SideBar.css";
 
 const SideBar = () => {
   const auth = useContext(AuthContext);
@@ -17,7 +18,7 @@ const SideBar = () => {
   return (
     <>
       {auth.isLoggedIn && role === "Supplier" && (
-        <Menu size="large" vertical>
+        <Menu size="large" vertical className="sidebar-menu">
           <Menu.Item
             name="dashboard"
             as={NavLink}
@@ -26,7 +27,7 @@ const SideBar = () => {
             active={activeItem === "dashboard"}
             onClick={() => handleItemClick("dashboard")}
           >
-            Dashboard
+            <Icon name="table">Dashboard</Icon>
           </Menu.Item>
           <Menu.Item
             name="products"
@@ -36,22 +37,22 @@ const SideBar = () => {
             active={activeItem === "products"}
             onClick={() => handleItemClick("products")}
           >
-            Products
+            <Icon name="shop">Products</Icon>
           </Menu.Item>
           <Menu.Item
             name="reports"
             as={NavLink}
-            to="/dashboard"
+            to="/"
             exact
             active={activeItem === "reports"}
             onClick={() => handleItemClick("reports")}
           >
-            Reports
+            <Icon name="chart bar">Reports</Icon>
           </Menu.Item>
         </Menu>
       )}
       {auth.isLoggedIn && role === "Customer" && (
-        <Menu size="large" vertical>
+        <Menu size="large" vertical className="sidebar-menu">
           <Menu.Item
             name="dashboard"
             as={NavLink}
@@ -60,7 +61,7 @@ const SideBar = () => {
             active={activeItem === "dashboard"}
             onClick={() => handleItemClick("dashboard")}
           >
-            Dashboard
+            <Icon name="table">Dashboard</Icon>
           </Menu.Item>
           <Menu.Item
             name="products"
@@ -70,7 +71,7 @@ const SideBar = () => {
             active={activeItem === "products"}
             onClick={() => handleItemClick("products")}
           >
-            Products
+            <Icon name="shop">Products</Icon>
           </Menu.Item>
           <Menu.Item
             name="orders"
@@ -80,17 +81,17 @@ const SideBar = () => {
             active={activeItem === "orders"}
             onClick={() => handleItemClick("orders")}
           >
-            Orders
+            <Icon name="book">Orders</Icon>
           </Menu.Item>
           <Menu.Item
             name="reports"
             as={NavLink}
-            to="/dashboard"
+            to="/"
             exact
             active={activeItem === "reports"}
             onClick={() => handleItemClick("reports")}
           >
-            Reports
+            <Icon name="chart bar">Reports</Icon>
           </Menu.Item>
         </Menu>
       )}

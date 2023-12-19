@@ -127,7 +127,7 @@ const Authenticate = (props) => {
       {props.isLogin && (
         <Form onSubmit={authLoginHandler}>
           <Form.Field>
-            <Icon name="user" size="large" />
+            <Icon name="user" size="large" className="icons" />
             <input
               placeholder="Email"
               name="email"
@@ -136,7 +136,7 @@ const Authenticate = (props) => {
             />
           </Form.Field>
           <Form.Field>
-            <Icon name="lock" size="large" />
+            <Icon name="lock" size="large" className="icons"/>
             <input
               type="password"
               placeholder="Password"
@@ -161,7 +161,7 @@ const Authenticate = (props) => {
       {!props.isLogin && (
         <Form onSubmit={authLoginHandler}>
           <Form.Field>
-            <label>Full Name</label>
+            <label>Company Name</label>
             <input
               placeholder="FullName"
               name="fullName"

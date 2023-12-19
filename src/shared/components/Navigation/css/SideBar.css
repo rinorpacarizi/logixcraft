@@ -1,0 +1,14 @@
+.sidebar-menu{
+    height: 100vh;
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+    background-color: rgb(48, 151, 151) !important;
+    font-size: 18px !important;
+    width: 7vw !important;
+    box-shadow:-4px 0px 0px 4px rgb(64, 199, 199) !important;
+}
+.sidebar-menu>a {
+    color: white !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
