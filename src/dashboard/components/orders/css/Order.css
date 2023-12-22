@@ -1,0 +1,67 @@
+.orders {
+  position: relative;
+  top: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.group-orders {
+  position: relative;
+  height: 50vh;
+  width: 87vw;
+  left: 7vw;
+}
+.create-order-button {
+  position: fixed;
+  bottom: 80vh;
+  left: 94vw;
+}
+.create-order-form{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-right: 3px;
+  justify-content: space-evenly;
+}
+.create-order-form>.fields{
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-evenly !important;
+  align-items: stretch;
+  width: 7vw;
+  font-size: 15px;
+}
+.create-order-form>.fields>label:first-child{
+  font-size: 30px !important;
+  font-weight: 600;
+  padding-bottom: 2vh;
+  display: flex;
+  justify-content: center;
+}
+.create-order-form>.fields>label:last-child{
+  font-size: 16px !important;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+.create-order-form>.fields>.fields{
+  width: 8vw !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-evenly;
+  padding-top: 2vh;
+}
+.amount-dropdown{
+  font-size: 13px !important;
+  width: 3vw !important;
+}
+.create-order-buttons{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  width: 20vw;
+  padding-bottom: 2vh;
+  padding-top: 2vh;
+}

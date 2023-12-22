@@ -1,0 +1,29 @@
+.main-grid{
+    width: 100vw !important;
+    height: 100vh !important;
+    display:flex !important;
+    align-items: center  !important;
+    align-content: center  !important;
+    flex-wrap: wrap  !important;
+    justify-content: center  !important;
+}
+.main-grid>.column{
+    width: 10vw !important;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 5vw !important;
+}
+.main-grid>.column>.row{
+    padding-top: 2vw !important;
+}
+.main-grid>.column>.row>label{
+    display: flex;
+    width: 20vw !important;
+    font-size: 16px;
+    font-weight: 600;
+}
+.main-grid>.column>.row>.inner-row-columns>button{
+    width: 5vw !important;
+    height: 8vh !important;
+}

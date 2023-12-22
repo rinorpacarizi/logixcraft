@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductsCard from "./features/ProductCard";
+import "./css/Product.css";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -22,9 +23,13 @@ const Products = () => {
 
   return (
     <>
-      {products.map((product) => (
-        <ProductsCard key={product.id} product={product} />
-      ))}
+      <div className="group-products">
+        <div className="products">
+          {products.map((product) => (
+            <ProductsCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
     </>
   );
 };

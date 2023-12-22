@@ -25,8 +25,8 @@ const NavLinks = () => {
     if (role === "Supplier") {
       routes = (
         <>
-        <Header/>
-          <SideBar />
+            <Header/>
+            <SideBar />
           <Switch>
             <Route path="/dashboard" exact>
               <Dashboard />
@@ -47,8 +47,8 @@ const NavLinks = () => {
     } else if (role === "Customer") {
       routes = (
         <>
-        <Header/>
-          <SideBar />
+            <Header />
+            <SideBar />
           <Switch>
             <Route path="/dashboard" exact>
               <Dashboard />
@@ -70,7 +70,6 @@ const NavLinks = () => {
   } else {
     routes = (
       <>
-
         <Route path="/home" exact>
           <Homepage />
         </Route>

@@ -28,8 +28,8 @@ const EditOrder = (props) => {
         Authorization: 'Bearer ' + auth.token
       }})
       .then(() => {
-        //history.push("/" + auth.userId + "/orders");
         props.closeForm();
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

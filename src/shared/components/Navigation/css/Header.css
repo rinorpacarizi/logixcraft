@@ -12,8 +12,11 @@
 }
 .header-menu{
     height:6vh; 
+    width: 100vw !important;
     margin-top:0 !important;
     margin-bottom:0 !important;
+    position: fixed;
+    top:0;
 } 
 
 .center-header-div {
@@ -30,13 +33,13 @@
 }
 
 .logo-v2{
-    background-color: rgb(32, 214, 238) !important;
+    background-color: #1a799f !important;
     width: 7vw;
     display: flex !important;
     align-items: center;
-    box-shadow:-4px 0px 0px 4px rgba(32, 214, 238, 0.452) !important;
+    box-shadow:-4px 0px 0px 4px #1a799f !important;
 }
-.logo-v2>img{
+.logo-v2>a>img{
     width: 5vw;
     height: 5vh;
     padding-left: 2vw;
@@ -47,7 +50,7 @@
 }
 .center-header-div> p:hover{
     color:#ff7b23;
-    transition: 250ms;
+    transition: 250ms ease-in;
     font-weight: 500;
 }
 .logout-menu{

@@ -27,7 +27,7 @@ const SideBar = () => {
             active={activeItem === "dashboard"}
             onClick={() => handleItemClick("dashboard")}
           >
-            <Icon name="table">Dashboard</Icon>
+            <Icon name="table"></Icon>Dashboard
           </Menu.Item>
           <Menu.Item
             name="products"
@@ -37,7 +37,7 @@ const SideBar = () => {
             active={activeItem === "products"}
             onClick={() => handleItemClick("products")}
           >
-            <Icon name="shop">Products</Icon>
+            <Icon name="shop"></Icon>Products
           </Menu.Item>
           <Menu.Item
             name="reports"
@@ -47,7 +47,7 @@ const SideBar = () => {
             active={activeItem === "reports"}
             onClick={() => handleItemClick("reports")}
           >
-            <Icon name="chart bar">Reports</Icon>
+            <Icon name="chart bar"></Icon>Reports
           </Menu.Item>
         </Menu>
       )}
@@ -61,7 +61,7 @@ const SideBar = () => {
             active={activeItem === "dashboard"}
             onClick={() => handleItemClick("dashboard")}
           >
-            <Icon name="table">Dashboard</Icon>
+            <Icon name="table"></Icon>Dashboard
           </Menu.Item>
           <Menu.Item
             name="products"
@@ -71,7 +71,7 @@ const SideBar = () => {
             active={activeItem === "products"}
             onClick={() => handleItemClick("products")}
           >
-            <Icon name="shop">Products</Icon>
+            <Icon name="shop"></Icon>Products
           </Menu.Item>
           <Menu.Item
             name="orders"
@@ -81,7 +81,8 @@ const SideBar = () => {
             active={activeItem === "orders"}
             onClick={() => handleItemClick("orders")}
           >
-            <Icon name="book">Orders</Icon>
+            <Icon name="book"></Icon>
+            Orders
           </Menu.Item>
           <Menu.Item
             name="reports"
@@ -91,7 +92,7 @@ const SideBar = () => {
             active={activeItem === "reports"}
             onClick={() => handleItemClick("reports")}
           >
-            <Icon name="chart bar">Reports</Icon>
+            <Icon name="chart bar"></Icon>Reports
           </Menu.Item>
         </Menu>
       )}

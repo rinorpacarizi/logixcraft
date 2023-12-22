@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ProductsCard from "./features/ProductCard";
 import CreateProduct from "./features/CreateProduct";
-import { Modal, Button } from "semantic-ui-react";
+import { Modal, Button, Popup } from "semantic-ui-react";
+import "./css/Product.css";
 
 const ProductsList = (props) => {
   const [openCreate, setOpenCreate] = useState(false);
@@ -14,20 +15,32 @@ const ProductsList = (props) => {
       {props.products.length === 0 ? (
         <h2>No products found</h2>
       ) : (
-        props.products.map((product) => (
-          <ProductsCard key={product.id} product={product} />
-        ))
+        <div className="group-products">
+          <div className="products">
+            {props.products.map((product) => (
+              <ProductsCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
       )}
       <Modal
         onClose={() => setOpenCreate(false)}
         onOpen={() => setOpenCreate(true)}
         open={openCreate}
         trigger={
-          <Button
-            basic
-            color="green"
-            content="Create Product"
-            onClick={handleCreateClose}
+          <Popup
+            content="Create a new product"
+            position='bottom center'
+            trigger={
+              <Button
+                basic
+                size="big"
+                color="green"
+                icon="add"
+                className="create-button"
+                onClick={handleCreateClose}
+              />
+            }
           />
         }
       >

@@ -106,12 +106,42 @@ const createOrder = async (req, res, next) => {
   res.status(201).json({ order: createdOrder });
 };
 
+const updateOrderStatus = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(new HttpError("Invalid Updated Data", 422));
+  }
+  const { status } = req.body;
+  const orderId = req.params.oid;
+
+  let order;
+
+  try {
+    order = await Order.findById(orderId);
+  } catch {
+    return next(new HttpError("Updating order failed", 500));
+  }
+
+  if(order.creator.toString() !== req.userData.userId){
+    return next(new HttpError("You cant edit this order", 401));
+  }
+  order.status = status;
+
+  try {
+    await order.save();
+  } catch {
+    return next(new HttpError("Updating order failed", 500));
+  }
+
+  res.status(200).json({ order: order.toObject({ getters: true }) });
+};
+
 const updateOrder = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid Updated Data", 422));
   }
-  const { amount,price, status } = req.body;
+  const { amount, price, status } = req.body;
   const orderId = req.params.oid;
 
   let order;
@@ -173,9 +203,11 @@ const deleteOrder = async (req, res, next) => {
 };
 
 
+
 exports.getOrders = getOrders;
 exports.getOrderById = getOrderById;
 exports.getOrdersUserById = getOrdersUserById;
 exports.createOrder = createOrder;
 exports.updateOrder = updateOrder;
+exports.updateOrderStatus = updateOrderStatus;
 exports.deleteOrder = deleteOrder;

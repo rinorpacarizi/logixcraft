@@ -1,0 +1,74 @@
+.order {
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  padding-left: 1vw !important;
+  padding-top: 1vh !important;
+  z-index: 1;
+  width: 75vw !important;
+  border-radius: 10px !important;
+  align-content: center !important;
+}
+.order > .item {
+  width: 100vw !important;
+  height: 8vh !important;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-start;
+  padding-top: 1vw !important;
+}
+
+.order > .item > .header {
+  display: flex !important;
+  align-items: center;
+  width: 6vw;
+  padding-left: 3%;
+}
+.list-image > .image > img {
+  width: 6vw !important;
+  height: 6vh !important;
+  object-fit: contain;
+}
+.list-body {
+  display: flex;
+  flex-direction: row;
+  padding-left: 1vw !important;
+  padding-right: 2vw !important;
+  align-items: center;
+  justify-content: space-between;
+  content: none !important;
+  width: 90% !important;
+}
+.list-header {
+  display: flex;
+  flex-direction: row;
+  padding-left: 2rem !important;
+  padding-right: 2vw !important;
+  align-items: center;
+  justify-content: space-between;
+  content: none !important;
+  width: 79% !important;
+  font-weight: 600;
+}
+.list-body > .header {
+  font-size: 16px !important;
+  width: 2vw;
+}
+.list-body > .description {
+  font-size: 16px !important;
+  width: 3vw;
+  display: flex !important;
+  justify-content: center;
+}
+.order-button {
+  position: relative;
+  width: 4vw;
+  left: 4vw;
+}
+.order > .extra {
+  width: 12vw !important;
+  padding-top: 3vh;
+  display: flex;
+  justify-content: center;
+}

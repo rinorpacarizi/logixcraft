@@ -33,8 +33,8 @@ const EditProduct = (props) => {
         Authorization: 'Bearer ' + auth.token
       }})
       .then(() => {
-        //history.push("/" + auth.userId + "/products");
         props.closeForm();
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

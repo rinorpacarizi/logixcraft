@@ -1,0 +1,24 @@
+.products{
+    position: relative;
+    top: 72vh;
+    left: 7vw;
+    width: 92vw;
+    display: grid;
+    grid-template-columns: 22% 22% 22% 22%;
+    grid-column-start: 2;
+    grid-row-gap: 10%;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 7vh;
+}
+.group-products{
+   position: relative;
+   height: 50vh;
+   bottom: 58vh;
+}
+.create-button{
+    position: fixed;
+    bottom: 85vh;
+    left: 94vw;
+}

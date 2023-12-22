@@ -36,6 +36,13 @@ router.patch(
   ],
   ordersController.updateOrder
 );
+router.patch(
+  "/:oid",
+  [
+    check("status").not().isEmpty()
+  ],
+  ordersController.updateOrder
+);
 
 router.delete("/:oid", ordersController.deleteOrder);
 

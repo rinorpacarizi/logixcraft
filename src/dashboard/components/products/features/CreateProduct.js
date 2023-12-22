@@ -42,7 +42,7 @@ const CreateProduct = (props) => {
         if (response.status !== 201) {
           throw new Error("Product creation failed");
         }
-        history.push("/");
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

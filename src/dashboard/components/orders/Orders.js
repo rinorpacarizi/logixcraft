@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import OrdersCard from "./features/OrdersCard";
+import "./css/Order.css"
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -22,12 +23,13 @@ const Orders = () => {
   }, []);
   return (
     <>
-      {orders.map((order) => (
-      <>
-        <p>Here</p>
-        <OrdersCard key={order.id} order={order} />
-        </>
-      ))}
+      <div className="group-products">
+        <div className="products">
+          {orders.map((order) => (
+            <OrdersCard key={order.id} order={order} />
+          ))}
+        </div>
+      </div>
     </>
   );
 };
