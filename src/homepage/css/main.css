@@ -1,6 +1,6 @@
 .main-section-1{
     background-color: #16141a;
-    height: 40vh;
+    height: 60vh;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -27,7 +27,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
-    height: 50vh;
+    height: 75vh;
 }
 .main-section-2>img{
     max-height: 33rem !important;
@@ -43,13 +43,10 @@
     font-size: 15px;
     padding-bottom: 30px;
 }
-.section-2-button:hover{
-    background-color: white;
-    color:red;
-}
+
 .main-section-3{
     width: 80vw;
-    height: 45vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -73,6 +70,8 @@
 }
 .section-3>div{
     padding-left: 40px;
+    height: 35vh;
+    width: 20vw;
 }
 .section-3>div>h2{
     font-weight: 800;
@@ -83,10 +82,10 @@
 }
 .main-section-4{
     position: relative;
-    left: 10vw;
+    left: 12vw;
     background-color: #f1f0f1;
     width: 75vw;
-    height: 30vh;
+    height: 40vh;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -110,7 +109,7 @@
     top:2vh;
     left: 10vw;
     width: 75vw;
-    height: 40vh;
+    height: 50vh;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -118,7 +117,7 @@
     
 }
 .main-section-5>img{
-    max-height: 40vh !important;
+    max-height: 45vh !important;
     border-radius: 10px;
     padding: 5px;
     width: 35vw !important;
@@ -148,7 +147,7 @@
     align-items: center;
 }
 .main-section-6>img{
-    max-height: 40vh !important;
+    max-height: 45vh !important;
     border-radius: 10px;
     padding: 5px;
     width: 35vw !important;
@@ -165,9 +164,10 @@
     width: 35vw;
     padding-left: 3rem;
 }
+
 .section-7{
     position: relative;
-    left: 10vw;
+    left: 12vw;
     background-color: #f1f0f1;
     width: 75vw;
     height: 30vh;
@@ -176,4 +176,9 @@
     justify-content: space-evenly;
     align-items: center;
     border-radius: 5px;
+    margin-bottom: 60px;
+}
+.section-7>h1{
+    font-size: 2vw !important;
+    font-weight: 800 !important;
 }

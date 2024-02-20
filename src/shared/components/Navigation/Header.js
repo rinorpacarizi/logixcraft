@@ -36,7 +36,7 @@ const Header = (props) => {
       )}
       {!auth.isLoggedIn && (
         <Menu size="large" className="main-menu">
-          <Menu.Menu position="left">
+          <Menu.Menu position="left" >
             <Image src={logo} className="logo" />
           </Menu.Menu>
           <Menu.Menu className="center-header-div">

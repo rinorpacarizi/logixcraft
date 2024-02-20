@@ -3,6 +3,9 @@
     justify-content: space-between !important;
     margin-bottom:0px !important;
 }
+.main-menu::after{
+    content: none !important;
+}
 
 .ui.modal > .header {
     background-color: #ff7b23 !important;
@@ -31,6 +34,7 @@
     display: flex !important;
     justify-content: center !important;
     width: 10vw;
+    padding-right: 10px;
 }
 
 .logo {
@@ -58,6 +62,7 @@
     color:#ff7b23;
     transition: 250ms ease-in;
     font-weight: 500;
+    cursor: pointer;
 }
 .logout-menu{
     padding-right: 1vw !important;

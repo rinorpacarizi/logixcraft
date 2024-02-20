@@ -39,7 +39,7 @@ const Main = () => {
           <Button
             content="Learn more"
             color="red"
-            basic
+            inverted
             circular
             size="massive"
             className="section-2-button"
@@ -148,7 +148,7 @@ const Main = () => {
       </div>
       <div className="section-7">
         <h1>Choose to LogixCraft and grow your business</h1>
-        <Button color="orange" size="Massive" circular content="Begin the journey!" />
+        <Button color="orange" size="massive" circular content="Begin the journey!" />
       </div>
     </div>
   );
