@@ -1,6 +1,7 @@
 .main-menu {
-    margin-left: 15vw !important;
-    margin-right: 15vw !important; 
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom:0px !important;
 }
 
 .ui.modal > .header {
@@ -25,6 +26,11 @@
     justify-content: center !important;
     width: 57vw !important;
     padding-top: 4rex;
+}
+.login-button{
+    display: flex !important;
+    justify-content: center !important;
+    width: 10vw;
 }
 
 .logo {

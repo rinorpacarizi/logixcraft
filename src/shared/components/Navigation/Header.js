@@ -44,14 +44,15 @@ const Header = (props) => {
             <p>About</p>
             <p>Contact Us</p>
           </Menu.Menu>
-          <Menu.Menu>
-            <Menu.Item position="right" name="home">
+          <Menu.Menu className="login-button">
+            <Menu.Item  position="right" name="home">
               <Modal
                 onClose={() => setOpenLogin(false)}
                 onOpen={() => setOpenLogin(true)}
                 open={openLogin}
                 size="tiny"
                 dimmer="blurring"
+                
                 trigger={
                   <Button
                     basic
