@@ -1,0 +1,10 @@
+.pagination{
+    position: relative;
+    left: 65rem;
+    top: 30rem;
+}
+.filters{
+    position: relative;
+    top: 8rem;
+    left: 21rem;
+}

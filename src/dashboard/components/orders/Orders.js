@@ -6,6 +6,7 @@ import "./css/Order.css"
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  
   useEffect(() => {
     const getOrders = async () => {
       try {
@@ -21,15 +22,18 @@ const Orders = () => {
     };
     getOrders();
   }, []);
+  
+
   return (
     <>
       <div className="group-products">
         <div className="products">
-          {orders.map((order) => (
+          {currentOrders.map((order) => (
             <OrdersCard key={order.id} order={order} />
           ))}
         </div>
       </div>
+      
     </>
   );
 };

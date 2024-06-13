@@ -119,33 +119,6 @@ const OrdersCard = (props) => {
       <Item.Extra>
         {auth.userId === props.order.creator && (
           <Modal
-            onClose={() => setOpenEdit(false)}
-            onOpen={() => setOpenEdit(true)}
-            open={openEdit}
-            trigger={
-              <Popup
-                content="Edit Order"
-                position="bottom center"
-                trigger={
-                  <Button
-                    basic
-                    color="blue"
-                    icon="pencil"
-                    onClick={handleEditClose}
-                  />
-                }
-              />
-            }
-          >
-            <Modal.Header>Change Order</Modal.Header>
-            <EditOrder
-              closeForm={handleEditClose}
-              order={props.order}
-            ></EditOrder>
-          </Modal>
-        )}
-        {auth.userId === props.order.creator && (
-          <Modal
             size="tiny"
             onClose={() => setOpenDelete(false)}
             onOpen={() => setOpenDelete(true)}

@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductsList from "../products/ProductsList";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import axios from "axios";
-import Pagination from "../../../shared/components/Pagination";
+import supplier from './supplier.css'
+import { Pagination } from "semantic-ui-react";
 
 const SupplierProducts = () => {
   const [products, setProducts] = useState([]);
   const userId = useParams().userId;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [productInPage, setproductInPage] = useState(8);
+  const [productInPage, setProductInPage] = useState(8);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -29,10 +29,24 @@ const SupplierProducts = () => {
   const lastProductIndex = currentPage * productInPage;
   const firstProductIndex = lastProductIndex - productInPage;
   const currentProducts = products.slice(firstProductIndex, lastProductIndex);
+  const totalPages = Math.ceil(products.length / productInPage);
+  const handlePageChange = (e, { activePage }) => {
+    setCurrentPage(activePage);
+  };
+
   return (
     <>
       <ProductsList products={currentProducts} />
-      <Pagination totalItems={products.length} itemsPerPage={productInPage}/>
+      <Pagination
+        defaultActivePage={1}
+        firstItem={null}
+        lastItem={null}
+        pointing
+        secondary
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        className="pagination"
+      />
     </>
   );
 };
